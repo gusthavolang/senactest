@@ -73,6 +73,11 @@ td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-alig
   .k2,.row2{grid-template-columns:1fr}
 }
 @media(max-width:420px){.k5,.k4,.k3,.k2{grid-template-columns:1fr}}
+th.s{cursor:pointer;user-select:none}
+th.s:hover{background:#EAEDF2;color:#374151}
+th.s::after{content:' ⇅';opacity:0.3;font-size:8px}
+th.s.asc::after{content:' ↑';opacity:1;color:#F47920}
+th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
 </style>
 
 <div class="w">
@@ -204,7 +209,7 @@ td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-alig
         </div>
         <div class="row1 pn">
           <div class="pt">Performance por campanha — SMS CAS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th>Campanha</th><th class="nr">Enviados</th><th class="nr">Entregues</th><th class="nr">Inválidos</th><th class="rr">Taxa falha</th><th>Tipo</th></tr></thead>
+          <table><thead><tr><th class="s">Campanha</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th><th class="s">Tipo</th></tr></thead>
           <tbody>
             <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada_2026</td><td class="nr">1.358</td><td class="nr">1.358</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocações</td></tr>
             <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD</td><td class="nr">1.239</td><td class="nr">1.239</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Boletos + matrículas</td></tr>
@@ -225,7 +230,7 @@ td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-alig
         </div>
         <div class="row1 pn">
           <div class="pt">Performance por ação — SMS SJC <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th>Curso / Turma</th><th class="nr">Enviados</th><th class="nr">Entregues</th><th class="nr">Inválidos</th><th class="rr">Taxa falha</th></tr></thead>
+          <table><thead><tr><th class="s">Curso / Turma</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
           <tbody>
             <tr><td style="font-size:10px">Qualidade e Eficiência na Coleta de Sangue</td><td class="nr">35</td><td class="nr">35</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
             <tr><td style="font-size:10px">Administração Geral (3 ações)</td><td class="nr">75</td><td class="nr">75</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
@@ -247,7 +252,7 @@ td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-alig
         </div>
         <div class="row1 pn">
           <div class="pt">Performance consolidada — SMS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th>Campanha / Unidade</th><th class="nr">Enviados</th><th class="nr">Entregues</th><th class="nr">Inválidos</th><th class="rr">Taxa falha</th></tr></thead>
+          <table><thead><tr><th class="s">Campanha / Unidade</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
           <tbody>
             <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada · <strong>CAS</strong></td><td class="nr">1.358</td><td class="nr">1.358</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
             <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.239</td><td class="nr">1.239</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
@@ -287,7 +292,7 @@ td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-alig
       <div class="row1 pn">
         <div class="pt">Qualidade por segmentação</div>
         <table>
-          <thead><tr><th>Segmentação</th><th class="nr">Total</th><th class="nr">Válidos</th><th class="nr">E-mails inv.</th><th class="nr">Opt-outs <sup style="color:#7C6EDB">¹</sup></th><th class="rr">Qualidade</th></tr></thead>
+          <thead><tr><th class="s">Segmentação</th><th class="nr s">Total</th><th class="nr s">Válidos</th><th class="nr s">E-mails inv.</th><th class="nr s">Opt-outs <sup style="color:#7C6EDB">¹</sup></th><th class="rr s">Qualidade</th></tr></thead>
           <tbody>
             <tr><td><span class="seg-pill">cursos_livres — ex-alunos + interesses + ocorrências</span></td><td class="nr">1.185.783</td><td class="nr">1.184.574</td><td class="nr" style="color:#E05050">1.209</td><td class="nr" style="color:#7C6EDB">~14.200</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
             <tr><td><span class="seg-pill">idiomas — alunos + ex-alunos + interesses</span></td><td class="nr">378.247</td><td class="nr">376.580</td><td class="nr" style="color:#E05050">1.667</td><td class="nr" style="color:#7C6EDB">~2.270</td><td class="rr"><span class="badge ok">99,6%</span></td></tr>
@@ -333,7 +338,7 @@ td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-alig
       </div>
       <div class="row1 pn">
         <div class="pt" id="tabelaTitle">Top cursos por interesse</div>
-        <table><thead><tr><th>Curso</th><th>Nível</th><th>Sub-área</th><th class="nr">Interessados</th></tr></thead>
+        <table><thead><tr><th class="s">Curso</th><th class="s">Nível</th><th class="s">Sub-área</th><th class="nr s">Interessados</th></tr></thead>
         <tbody id="tabelaBody"></tbody></table>
       </div>
     </div>
@@ -950,7 +955,7 @@ function renderCampOverview(){
   const tot=comerciais.reduce((s,c)=>s+c.ent,0)+(regua?regua.ent:0);
   document.getElementById('eTabBody').innerHTML=`
     <table>
-      <thead><tr><th>Campanha</th><th style="text-align:center">Ações</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th><th>Detalhe</th></tr></thead>
+      <thead><tr><th class="s">Campanha</th><th class="s" style="text-align:center">Ações</th><th class="nr s">Entregues</th><th class="rr s">Abertura</th><th class="rr s">CTR</th><th>Detalhe</th></tr></thead>
       <tbody>${rows}${rRow}</tbody>
       <tfoot class="tfoot"><tr><td colspan="2"><strong>Total geral</strong></td><td class="nr"><strong>${fmtN(tot)}</strong></td><td></td><td></td><td></td></tr></tfoot>
     </table>
@@ -1003,7 +1008,7 @@ function renderCampDetail(key){
       <div class="kc"><div class="kl">CTR médio</div><div class="kv" style="color:#F5C842">${ctrMedia}%</div></div>
     </div>
     <table>
-      <thead><tr><th>Ação</th><th style="white-space:nowrap">Data envio</th><th class="nr">Disparados</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th></tr></thead>
+      <thead><tr><th class="s">Ação</th><th class="s" style="white-space:nowrap">Data envio</th><th class="nr s">Disparados</th><th class="nr s">Entregues</th><th class="rr s">Abertura</th><th class="rr s">CTR</th></tr></thead>
       <tbody>${exibidas.map(a=>`
         <tr>
           <td style="font-size:9px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.nome}">${a.nome}</td>
@@ -1046,7 +1051,7 @@ function renderOperacao(){
   document.getElementById('oFtnt').innerHTML=`<sup style="color:#7C6EDB">¹</sup> ${d.ftnt}`;
   document.getElementById('oTabBody').innerHTML=`
     <table>
-      <thead><tr><th>Campanha / Ação</th><th>Canal</th><th>Status</th><th class="nr">Volume</th><th>Agendado</th><th>T. fila <sup style="color:#7C6EDB">¹</sup></th></tr></thead>
+      <thead><tr><th class="s">Campanha / Ação</th><th class="s">Canal</th><th class="s">Status</th><th class="nr s">Volume</th><th class="s">Agendado</th><th class="s">T. fila <sup style="color:#7C6EDB">¹</sup></th></tr></thead>
       <tbody>${d.disparos.map(r=>`
         <tr>
           <td style="font-size:10px">${r.camp}</td>
@@ -1127,6 +1132,41 @@ function onDateChange(){
   renderEmail();
   renderSms();
 }
+
+// ─── SORT DE TABELAS ──────────────────────────────────────────────────────────
+const TABLE_SORT={};
+function sortCol(th){
+  const tbl=th.closest('table');
+  if(!tbl) return;
+  const tbody=tbl.querySelector('tbody');
+  if(!tbody) return;
+  const ths=[...th.closest('tr').querySelectorAll('th')];
+  const col=ths.indexOf(th);
+  const tid=tbl.dataset.sid||(tbl.dataset.sid='s'+Math.random().toString(36).slice(2,8));
+  if(!TABLE_SORT[tid]) TABLE_SORT[tid]={col:-1,dir:1};
+  const ss=TABLE_SORT[tid];
+  ss.dir=ss.col===col?-ss.dir:1; ss.col=col;
+  ths.forEach((h,i)=>{h.classList.remove('asc','desc');if(i===col)h.classList.add(ss.dir===1?'asc':'desc');});
+  // Parser: tenta numérico em pt-BR (1.234,5 → 1234.5), senão texto
+  const parse=t=>{
+    const s=t.replace(/[~\s★]/g,'').replace(/[.]/g,'').replace(',','.').replace('%','');
+    const n=parseFloat(s);return isNaN(n)?t.toLowerCase().trim():n;
+  };
+  const val=td=>parse(td.textContent.trim());
+  const rows=[...tbody.querySelectorAll('tr')];
+  const foot=rows.filter(r=>r.classList.contains('tfoot'));
+  const body=rows.filter(r=>!r.classList.contains('tfoot'));
+  body.sort((a,b)=>{
+    const tA=a.querySelectorAll('td')[col],tB=b.querySelectorAll('td')[col];
+    if(!tA||!tB) return 0;
+    const vA=val(tA),vB=val(tB);
+    if(typeof vA==='number'&&typeof vB==='number') return (vA-vB)*ss.dir;
+    return vA<vB?-ss.dir:vA>vB?ss.dir:0;
+  });
+  [...body,...foot].forEach(r=>tbody.appendChild(r));
+}
+// Delegação global — captura clique em qualquer th.s
+document.addEventListener('click',e=>{const th=e.target.closest('th.s');if(th)sortCol(th);});
 
 // ─── POPULATE SELECTS ─────────────────────────────────────────────────────────
 function toTitleCase(s){return s.toLowerCase().replace(/\b\w/g,l=>l.toUpperCase());}
