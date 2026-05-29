@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Senac SP — CRM Analytics P1</title></head>
+<body style="margin:16px;background:#F0F2F5;font-family:system-ui,sans-serif">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{border-radius:10px;overflow:hidden;border:1px solid #1B2E5A;font-size:12px;font-family:inherit}
+.hdr{background:#1B2E5A;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.flt{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fl{font-size:10px;color:rgba(255,255,255,0.55)}
+.fs{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;font-family:inherit}
+.fs::placeholder{color:rgba(255,255,255,0.4)}
+.fs.err{border-color:#E05050!important}
+.date-wrap{display:flex;align-items:center;gap:5px}
+.date-sep{color:rgba(255,255,255,0.4);font-size:10px}
+.date-input{width:100px}
+.meta{font-size:10px;color:rgba(255,255,255,0.4);text-align:right;white-space:nowrap}
+.tabs{background:#152548;display:flex;padding:0 10px;border-bottom:1px solid rgba(255,255,255,0.15);overflow-x:auto}
+.tb{display:inline-block;border-bottom:2px solid transparent;font-size:11px;padding:10px 13px;cursor:pointer;white-space:nowrap;user-select:none;color:#fff!important;font-family:inherit;font-weight:400}
+.tb.act{color:#F47920!important;border-bottom-color:#F47920;font-weight:500}
+.body{background:#EEF1F6;padding:12px}
+.sec-hdr{font-size:11px;font-weight:500;color:#1B2E5A;margin:12px 0 8px;padding-bottom:5px;border-bottom:2px solid #F47920;display:inline-block}
+.kg{display:grid;gap:8px;margin-bottom:9px}
+.k5{grid-template-columns:repeat(5,1fr)}.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}.k2{grid-template-columns:1fr 1fr}
+.kc{background:#fff;border:0.5px solid #DDE1EA;border-radius:7px;padding:10px 11px;position:relative}
+.kc.hl{background:#1B2E5A;border-color:#1B2E5A}
+.kl{font-size:10px;color:#6B7280;margin-bottom:3px;line-height:1.3}
+.kc.hl .kl{color:rgba(255,255,255,0.6)}
+.kv{font-size:16px;font-weight:500;color:#1B2E5A;line-height:1}.kv.lg{font-size:18px}
+.kc.hl .kv{color:#fff;font-size:20px}
+.ks{font-size:10px;color:#9CA3AF;margin-top:3px}.kc.hl .ks{color:rgba(255,255,255,0.45)}
+.trend{position:absolute;top:9px;right:9px;font-size:10px;font-weight:500;padding:1px 5px;border-radius:4px}
+.tu{background:#DCFCE7;color:#15803D}.td{background:#FEE2E2;color:#B91C1C}
+.rg{display:grid;gap:8px;margin-bottom:9px}
+.rc{background:#fff;border:0.5px solid #DDE1EA;border-radius:7px;padding:8px 10px;text-align:center;border-top:3px solid #F47920}
+.rc.tc{border-top-color:#2BB5C8}.rc.yc{border-top-color:#F5C842}
+.rl{font-size:10px;color:#6B7280;margin-bottom:2px}.rv{font-size:16px;font-weight:500;color:#1B2E5A}
+.rd2{font-size:9px;color:#9CA3AF;margin-top:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.row1{margin-bottom:9px}
+.pn{background:#fff;border:0.5px solid #DDE1EA;border-radius:7px;padding:12px}
+.pt{font-size:11px;font-weight:500;color:#1B2E5A;margin-bottom:9px}.ptc{text-align:center}
+.leg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:7px}
+.li{display:flex;align-items:center;gap:4px;font-size:10px;color:#6B7280}
+.ld{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{background:#F5F7FA;color:#6B7280;font-weight:500;padding:5px 7px;text-align:left;border-bottom:1px solid #E5E7EB;font-size:10px;white-space:nowrap}
+td{padding:5px 7px;border-bottom:0.5px solid #F3F4F6;color:#374151;vertical-align:middle}
+.tfoot td{border-bottom:none;font-weight:500;background:#F9FAFB}
+.nr{text-align:right;color:#1B2E5A;white-space:nowrap}.rr{text-align:right;white-space:nowrap}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 6px;border-radius:8px}
+.ok{background:#DCFCE7;color:#15803D}.warn{background:#FEF9C3;color:#92400E}
+.bad{background:#FEE2E2;color:#B91C1C}.info{background:#E0F2FE;color:#0369A1}.pu{background:#F3E8FF;color:#7C6EDB}
+.note{background:#EEF9FC;border-radius:6px;border-left:3px solid #2BB5C8;padding:8px 10px;margin-bottom:9px}
+.no-data{text-align:center;padding:32px 16px;color:#9CA3AF;font-size:12px}
+.opt-bar{display:flex;align-items:center;gap:6px;margin:4px 0}
+.opt-fill{height:5px;border-radius:3px;background:#7C6EDB;flex-shrink:0}
+.opt-val{font-size:10px;color:#7C6EDB;font-weight:500;white-space:nowrap}
+.opt-label{font-size:10px;color:#374151;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.ftnt{font-size:9px;color:#9CA3AF;margin-top:8px}
+.highlight-pos{background:#DCFCE7;border:0.5px solid #86EFAC;padding:2px 7px;border-radius:5px;font-size:11px;color:#15803D;font-weight:700}
+.seg-pill{display:inline-block;background:#F0F4FF;border:0.5px solid #C7D4F5;color:#1B2E5A;font-size:9px;padding:2px 6px;border-radius:10px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
+.cb{background:#F0F4FF;border:0.5px solid #C7D4F5;border-radius:7px;padding:7px 11px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.cb-nome{font-size:11px;font-weight:500;color:#1B2E5A}
+.cb-back{font-size:10px;color:#F47920;cursor:pointer;background:none;border:none;padding:0;font-family:inherit;text-decoration:underline}
+.rela-row td{background:#FFFBEB!important;color:#92400E}
+@media(max-width:700px){
+  .k5,.k4{grid-template-columns:repeat(2,1fr)}
+  .k3{grid-template-columns:repeat(2,1fr)}
+  .k2,.row2{grid-template-columns:1fr}
+}
+@media(max-width:420px){.k5,.k4,.k3,.k2{grid-template-columns:1fr}}
+</style>
+
+<div class="w">
+  <div class="hdr">
+    <div class="flt">
+      <div class="fg"><span class="fl">Unidade / Gerência</span>
+        <select class="fs" id="unitSel" onchange="onUnitChange(this.value)">
+          <option value="todas">Todas</option><option value="GCR">GCR</option>
+          <option value="CAS">CAS</option><option value="SJC">SJC</option>
+        </select>
+      </div>
+      <div class="fg"><span class="fl">Período (DD/MM/AAAA)</span>
+        <div class="date-wrap">
+          <input type="text" class="fs date-input" id="dtFrom" value="01/01/2026" placeholder="DD/MM/AAAA" oninput="onDateChange()">
+          <span class="date-sep">até</span>
+          <input type="text" class="fs date-input" id="dtTo" value="26/05/2026" placeholder="DD/MM/AAAA" oninput="onDateChange()">
+        </div>
+      </div>
+      <div class="fg"><span class="fl">Campanha</span>
+        <select class="fs" style="min-width:190px" id="campSel" onchange="onCampanhaChange(this.value)">
+          <option value="">Todas as campanhas</option>
+          <option value="pos_grad">pos_graduacao | Inscrições prorrogadas</option>
+          <option value="vestibular">vestibular_1_semestre_2026_presencial_GCR</option>
+          <option value="processo_sel1">processo_sel_EAD_2026_1_GCR</option>
+          <option value="processo_sel2">processo_sel_EAD_2026_2_GCR</option>
+          <option value="idiomas">idiomas_2026_GCR</option>
+          <option value="cursos_tec">rede_ead_cursos_tecnicos_2026_GCR</option>
+          <option value="institucional">campanha_institucional_2026_GCR</option>
+          <option value="meu_senac">meu_senac_2026_GCR</option>
+          <option value="avisos">avisos_2026_GCR</option>
+          <option value="cursos_livres">cursos_livres_2026_GCR</option>
+        </select>
+      </div>
+    </div>
+    <div class="meta">Atualizado em<br><span id="metaTime">26/05/2026 09:00</span></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tb act" onclick="sw('e',this)">E-mail Marketing</div>
+    <div class="tb" onclick="sw('s',this)">SMS</div>
+    <div class="tb" onclick="sw('q',this)">Qualidade da Base</div>
+    <div class="tb" onclick="sw('o',this)">Operação</div>
+    <div class="tb" onclick="sw('i',this)">Reg. de Interesse</div>
+  </div>
+
+  <div class="body">
+    <div id="loadBanner" style="display:none;background:#EEF9FC;border-radius:6px;border-left:3px solid #2BB5C8;padding:7px 12px;margin-bottom:9px;font-size:11px;color:#0E6E88;align-items:center;gap:8px"></div>
+
+    <!-- EMAIL -->
+    <div id="te">
+      <div id="eGCR">
+        <div class="note" style="padding:6px 10px;margin-bottom:9px">
+          <span style="font-size:10px;color:#0E6E88">Exibindo: <strong id="periodoLabel">01/01/2026 – 26/05/2026</strong> · <strong id="unidadeLabel">Todas as unidades</strong></span>
+        </div>
+        <div id="campBanner" style="display:none" class="cb">
+          <span class="cb-nome" id="campBannerNome"></span>
+          <button class="cb-back" onclick="voltarGeral()">← Voltar para visão geral</button>
+        </div>
+        <div class="kg k5">
+          <div class="kc"><div class="kl">Total disparados</div><div class="kv lg" id="eDisp">12.660.000</div><div class="ks">Base de disparo</div></div>
+          <div class="kc"><div class="kl">E-mails entregues</div><div class="kv lg" style="color:#F47920" id="eEnt">12.585.000</div><div class="ks">Disparados − bounces</div></div>
+          <div class="kc"><div class="kl">E-mails inválidos</div><div class="kv lg" style="color:#E05050" id="eInv">75.000</div><div class="ks" id="eInvSub">Hard bounce · 0,6%</div></div>
+          <div class="kc"><div class="kl">Aberturas únicas</div><div class="kv lg" style="color:#2BB5C8" id="eAb">1.934.000</div><div class="ks">1ª abertura/destinatário</div></div>
+          <div class="kc"><div class="kl">Cliques únicos</div><div class="kv lg" style="color:#F5C842" id="eCl">96.000</div><div class="ks">1º clique/destinatário</div></div>
+        </div>
+        <div class="rg k3" style="margin-bottom:12px">
+          <div class="rc"><div class="rl">Taxa de entrega</div><div class="rv" id="eTxEnt">99,4%</div><div class="rd2">Entregues / Disparados</div></div>
+          <div class="rc tc"><div class="rl">Taxa de abertura</div><div class="rv" id="eTxAb">15,4%</div><div class="rd2">Aberturas / Entregues</div></div>
+          <div class="rc yc"><div class="rl">CTR</div><div class="rv" id="eCtr">0,76%</div><div class="rd2">Cliques / Entregues</div></div>
+        </div>
+        <div class="row1 pn">
+          <div class="pt" id="eChartTitle">Evolução mensal — e-mail (em milhares)</div>
+          <div style="position:relative;width:100%;height:175px"><canvas id="cEl"></canvas></div>
+          <div class="leg">
+            <div class="li"><span class="ld" style="background:#1B2E5A"></span>Disparados</div>
+            <div class="li"><span class="ld" style="background:#F47920"></span>Entregues</div>
+            <div class="li"><span class="ld" style="background:#E05050"></span>Inválidos</div>
+            <div class="li"><span class="ld" style="background:#2BB5C8"></span>Aberturas</div>
+            <div class="li"><span class="ld" style="background:#F5C842"></span>Cliques</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="pn">
+            <div class="pt" id="eTabTitle">Performance por campanha</div>
+            <div id="eTabBody"></div>
+          </div>
+          <div class="pn">
+            <div class="pt">Opt-outs por campanha <sup style="color:#7C6EDB">¹</sup></div>
+            <div style="font-size:10px;color:#6B7280;margin-bottom:8px">% sobre e-mails entregues · estimado</div>
+            <div id="eOptBars"></div>
+            <div style="border-top:0.5px solid #F3F4F6;padding-top:7px;margin-top:7px;display:flex;justify-content:space-between">
+              <span style="font-size:10px;color:#6B7280">Total estimado</span>
+              <span id="eOptTotal" style="font-size:11px;font-weight:500;color:#7C6EDB">~126.000</span>
+            </div>
+            <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Campo opt-out não disponível nos relatórios do CRM. Valores <strong>estimados</strong>. Pendência GTI.</div>
+          </div>
+        </div>
+      </div>
+      <div id="eNoData" style="display:none">
+        <div class="no-data">
+          <span style="font-size:28px;display:block;margin-bottom:8px">📧</span>
+          <div style="font-weight:500;color:#374151;margin-bottom:6px">E-mail marketing gerenciado pela GCR</div>
+          <div><strong id="eNoDataUnit"></strong> não realiza disparos de e-mail diretamente. Selecione <strong>GCR</strong> ou <strong>Todas</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SMS -->
+    <div id="ts" style="display:none">
+      <div id="sGCR" style="display:none">
+        <div class="no-data"><span style="font-size:28px;display:block;margin-bottom:8px">📱</span>
+          <div style="font-weight:500;color:#374151;margin-bottom:6px">SMS operacional — gerenciado pelas unidades</div>
+          <div>GCR não realiza SMS diretamente. Selecione <strong>CAS</strong>, <strong>SJC</strong> ou <strong>Todas</strong>.</div>
+        </div>
+      </div>
+      <div id="sCAS" style="display:none">
+        <div class="kg k4">
+          <div class="kc"><div class="kl">SMS enviados · CAS</div><div class="kv lg">4.795</div><div class="ks">Jan–Mar 2026 · 37 ações</div></div>
+          <div class="kc"><div class="kl">SMS entregues</div><div class="kv lg" style="color:#F47920">4.795</div><div class="ks">100% entregues</div></div>
+          <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#5DBE8A">0</div><div class="ks">Sem falhas registradas</div></div>
+          <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#5DBE8A">0,0%</div><div class="ks">Inválidos / Enviados</div></div>
+        </div>
+        <div class="row1 pn">
+          <div class="pt">Performance por campanha — SMS CAS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
+          <table><thead><tr><th>Campanha</th><th class="nr">Enviados</th><th class="nr">Entregues</th><th class="nr">Inválidos</th><th class="rr">Taxa falha</th><th>Tipo</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada_2026</td><td class="nr">1.358</td><td class="nr">1.358</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocações</td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD</td><td class="nr">1.239</td><td class="nr">1.239</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Boletos + matrículas</td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD</td><td class="nr">1.107</td><td class="nr">1.107</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
+            <tr><td style="font-size:10px">vestibular_1_semestre_2026_presencial</td><td class="nr">616</td><td class="nr">616</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Aprovados não matr.</td></tr>
+            <tr><td style="font-size:10px">graduacao_1_semestre_2026_EAD</td><td class="nr">418</td><td class="nr">418</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocados</td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_1_semestre_presencial</td><td class="nr">57</td><td class="nr">57</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
+            <tr class="tfoot"><td><strong>Total CAS</strong></td><td class="nr"><strong>4.795</strong></td><td class="nr"><strong>4.795</strong></td><td class="nr"><strong>0</strong></td><td class="rr"><span class="badge ok">0,0%</span></td><td></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div id="sSJC" style="display:none">
+        <div class="kg k4">
+          <div class="kc"><div class="kl">SMS enviados · SJC</div><div class="kv lg">266</div><div class="ks">Jan–Mar 2026 · 13 ações</div></div>
+          <div class="kc"><div class="kl">SMS entregues</div><div class="kv lg" style="color:#F47920">255</div><div class="ks">Enviados − inválidos</div></div>
+          <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050">11</div><div class="ks">1 ação com falha</div></div>
+          <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#E05050">4,1%</div><div class="ks">Inválidos / Enviados</div></div>
+        </div>
+        <div class="row1 pn">
+          <div class="pt">Performance por ação — SMS SJC <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
+          <table><thead><tr><th>Curso / Turma</th><th class="nr">Enviados</th><th class="nr">Entregues</th><th class="nr">Inválidos</th><th class="rr">Taxa falha</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:10px">Qualidade e Eficiência na Coleta de Sangue</td><td class="nr">35</td><td class="nr">35</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Administração Geral (3 ações)</td><td class="nr">75</td><td class="nr">75</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Técnico em Farmácia</td><td class="nr">30</td><td class="nr">30</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Língua Brasileira de Sinais</td><td class="nr">23</td><td class="nr">23</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Higiene na Manipulação de Alimentos</td><td class="nr">7</td><td class="nr">7</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Técnicas de Manicure <em style="color:#E05050">(falha no número)</em></td><td class="nr">18</td><td class="nr" style="color:#E05050">7</td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge bad">61,1%</span></td></tr>
+            <tr><td style="font-size:10px">Demais ações (5 avisos)</td><td class="nr">78</td><td class="nr">78</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr class="tfoot"><td><strong>Total SJC</strong></td><td class="nr"><strong>266</strong></td><td class="nr"><strong>255</strong></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div id="sTodas">
+        <div class="kg k4">
+          <div class="kc"><div class="kl">SMS enviados · Total</div><div class="kv lg">5.061</div><div class="ks">Jan–Mar 2026 · CAS + SJC</div></div>
+          <div class="kc"><div class="kl">SMS entregues</div><div class="kv lg" style="color:#F47920">5.050</div><div class="ks">99,8% entregues</div></div>
+          <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050">11</div><div class="ks">SJC · 0,2% do total</div></div>
+          <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#F5C842">0,2%</div><div class="ks">Inválidos / Enviados</div></div>
+        </div>
+        <div class="row1 pn">
+          <div class="pt">Performance consolidada — SMS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
+          <table><thead><tr><th>Campanha / Unidade</th><th class="nr">Enviados</th><th class="nr">Entregues</th><th class="nr">Inválidos</th><th class="rr">Taxa falha</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada · <strong>CAS</strong></td><td class="nr">1.358</td><td class="nr">1.358</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.239</td><td class="nr">1.239</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.107</td><td class="nr">1.107</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">vestibular_1_semestre_presencial · <strong>CAS</strong></td><td class="nr">616</td><td class="nr">616</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">graduacao_EAD + outros · <strong>CAS</strong></td><td class="nr">475</td><td class="nr">475</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">avisos_2026 — 13 ações · <strong>SJC</strong></td><td class="nr">266</td><td class="nr">255</td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
+            <tr class="tfoot"><td><strong>Total geral</strong></td><td class="nr"><strong>5.061</strong></td><td class="nr"><strong>5.050</strong></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge ok">0,2%</span></td></tr>
+          </tbody></table>
+          <div class="ftnt">SMS são comunicações operacionais (avisos de turma, convocações, acompanhamento de matrículas).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUALIDADE -->
+    <div id="tq" style="display:none">
+      <div class="sec-hdr">Base <strong id="qUnidLabel">Geral</strong> <span style="font-size:9px;color:#9CA3AF;font-weight:400;margin-left:6px">¹ estimado — dados completos pendentes de GTI</span></div>
+      <div class="kg k5">
+        <div class="kc hl"><div class="kl">Total de contatos</div><div class="kv" style="font-size:16px;color:#fff" id="qTotal">1.284.900</div><div class="ks" id="qTotalSub">Base Única</div></div>
+        <div class="kc"><div class="kl">Qualidade da base</div><div class="kv lg" style="color:#5DBE8A" id="qQual">82,4%</div><div class="ks">Contatos válidos / total</div><span class="trend tu">↑ 1,2%</span></div>
+        <div class="kc"><div class="kl">E-mails inválidos</div><div class="kv lg" style="color:#E05050" id="qEmailInv">12,3%</div><div class="ks">Da base total</div><span class="trend td">↑ 0,4%</span></div>
+        <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050" id="qNumInv">8,7%</div><div class="ks">Da base total</div><span class="trend td">↑ 0,2%</span></div>
+        <div class="kc"><div class="kl">Duplicidades</div><div class="kv lg" style="color:#7C6EDB" id="qDupl">3,1%</div><div class="ks">Registros duplicados</div><span class="trend tu">↓ 0,3%</span></div>
+      </div>
+      <div class="row2">
+        <div class="pn">
+          <div class="pt">Crescimento da base <sup style="color:#7C6EDB">¹</sup></div>
+          <div style="position:relative;width:100%;height:160px"><canvas id="cQcr"></canvas></div>
+          <div class="leg"><div class="li"><span class="ld" style="background:#5DBE8A"></span>Novos contatos</div><div class="li"><span class="ld" style="background:#E8B0B0"></span>Opt-outs + inválidos</div></div>
+        </div>
+        <div class="pn">
+          <div class="pt">Taxa de descadastro por campanha <sup style="color:#7C6EDB">¹</sup></div>
+          <div style="position:relative;width:100%;height:160px"><canvas id="cQdc"></canvas></div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:6px">% opt-out / e-mails entregues · estimado por campanha</div>
+        </div>
+      </div>
+      <div class="sec-hdr">Segmentações (Listas de Disparo) <span style="font-size:9px;color:#9CA3AF;font-weight:400;margin-left:6px">¹ estimado</span></div>
+      <div class="row1 pn">
+        <div class="pt">Qualidade por segmentação</div>
+        <table>
+          <thead><tr><th>Segmentação</th><th class="nr">Total</th><th class="nr">Válidos</th><th class="nr">E-mails inv.</th><th class="nr">Opt-outs <sup style="color:#7C6EDB">¹</sup></th><th class="rr">Qualidade</th></tr></thead>
+          <tbody>
+            <tr><td><span class="seg-pill">cursos_livres — ex-alunos + interesses + ocorrências</span></td><td class="nr">1.185.783</td><td class="nr">1.184.574</td><td class="nr" style="color:#E05050">1.209</td><td class="nr" style="color:#7C6EDB">~14.200</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
+            <tr><td><span class="seg-pill">idiomas — alunos + ex-alunos + interesses</span></td><td class="nr">378.247</td><td class="nr">376.580</td><td class="nr" style="color:#E05050">1.667</td><td class="nr" style="color:#7C6EDB">~2.270</td><td class="rr"><span class="badge ok">99,6%</span></td></tr>
+            <tr><td><span class="seg-pill">processo_seletivo_EAD — descontos bacharelado</span></td><td class="nr">235.893</td><td class="nr">235.718</td><td class="nr" style="color:#E05050">175</td><td class="nr" style="color:#7C6EDB">~940</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
+            <tr><td><span class="seg-pill">meu_senac — alunos cursando + responsáveis</span></td><td class="nr">92.929</td><td class="nr">92.415</td><td class="nr" style="color:#E05050">514</td><td class="nr" style="color:#7C6EDB">~280</td><td class="rr"><span class="badge ok">99,4%</span></td></tr>
+            <tr><td><span class="seg-pill">pos_graduacao — inscrições prorrogadas</span></td><td class="nr">22.681</td><td class="nr">22.681</td><td class="nr" style="color:#E05050">0</td><td class="nr" style="color:#7C6EDB">~23</td><td class="rr"><span class="badge ok">100%</span></td></tr>
+            <tr class="tfoot"><td><strong>Total (amostra)</strong></td><td class="nr"><strong>1.915.533</strong></td><td class="nr"><strong>1.911.968</strong></td><td class="nr" style="color:#E05050"><strong>3.565</strong></td><td class="nr" style="color:#7C6EDB"><strong>~17.713</strong></td><td class="rr"><span class="badge ok">99,8%</span></td></tr>
+          </tbody>
+        </table>
+        <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Valores de opt-out estimados. Campo não disponível nos relatórios do CRM. Pendência GTI.</div>
+      </div>
+    </div>
+
+    <!-- OPERAÇÃO -->
+    <div id="to" style="display:none">
+      <div class="kg k2">
+        <div class="kc hl"><div class="kl">Disparos em fila</div><div class="kv" style="font-size:36px;color:#fff" id="oFila">3</div><div class="ks">Aguardando processamento</div></div>
+        <div class="kc hl"><div class="kl">Tempo médio de fila</div><div class="kv" style="font-size:36px;color:#F47920" id="oTempo">~1h</div><div class="ks" id="oTempoSub">Grandes volumes (1M+) · &lt;5min para &lt;10K dest.</div></div>
+      </div>
+      <div class="row1 pn">
+        <div class="pt">Status dos disparos <span style="font-size:9px;color:#9CA3AF;font-weight:400">· tempo de fila estimado <sup style="color:#7C6EDB">¹</sup></span></div>
+        <div id="oTabBody"></div>
+      </div>
+      <div class="row1 pn">
+        <div class="pt">Histórico de tempo médio de fila por mês (min) <sup style="color:#7C6EDB">¹</sup></div>
+        <div style="position:relative;width:100%;height:140px"><canvas id="cOp"></canvas></div>
+        <div class="leg"><div class="li"><span class="ld" style="background:#F47920"></span>Tempo médio (min)</div></div>
+        <div class="ftnt" id="oFtnt"><sup style="color:#7C6EDB">¹</sup> Tempo de fila não disponível nos relatórios atuais. Estimado com base nos horários de agendamento vs envio.</div>
+      </div>
+    </div>
+
+    <!-- INTERESSE -->
+    <div id="ti" style="display:none">
+      <div class="row2">
+        <div class="pn"><div class="pt ptc">Por nível de ensino</div>
+          <div style="position:relative;width:100%;height:155px"><canvas id="cIp"></canvas></div>
+          <div class="leg" id="legNivel"></div>
+        </div>
+        <div class="pn"><div class="pt ptc">Por período do dia</div>
+          <div style="position:relative;width:100%;height:155px"><canvas id="cPp"></canvas></div>
+          <div class="leg" id="legPeriodo"></div>
+        </div>
+      </div>
+      <div class="row1 pn">
+        <div class="pt" id="tabelaTitle">Top cursos por interesse</div>
+        <table><thead><tr><th>Curso</th><th>Nível</th><th>Sub-área</th><th class="nr">Interessados</th></tr></thead>
+        <tbody id="tabelaBody"></tbody></table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
+const xa={grid:{display:false},ticks:{font:{size:10},color:'#9CA3AF'}};
+const ya={grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF',callback:v=>Math.abs(v)>=1000?(v<0?'-':'')+(Math.abs(v)/1000).toFixed(0)+'k':v}};
+const MOS=['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26'];
+const MOD=[new Date(2026,0,1),new Date(2026,1,1),new Date(2026,2,1),new Date(2026,3,1),new Date(2026,4,1)];
+const ST={unit:'todas',campanha:'',from:new Date(2026,0,1),to:new Date(2026,4,26)};
+
+// ─── APPS SCRIPT INTEGRATION ──────────────────────────────────────────────────
+// Após implantar o Code.gs como Web App, cole a URL abaixo.
+// Enquanto vazio, o dashboard usa os dados estáticos (mockup).
+const APPS_SCRIPT_URL = '';
+
+async function carregarDadosRemoto() {
+  if (!APPS_SCRIPT_URL) return;
+
+  const banner = document.getElementById('loadBanner');
+  banner.style.display = 'flex';
+  banner.innerHTML = '⟳&nbsp; Carregando dados da planilha…';
+
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const d = await resp.json();
+    if (d.erro) throw new Error(d.erro);
+
+    // ── 1. Campanhas de e-mail (agregadas pelo Apps Script a partir de email_acoes)
+    // Dados reais: nome, ações, enviados, abertura%, CTR%
+    // opt=0 porque o campo não existe nos relatórios do CRM
+    if (d.campanhas?.length) {
+      CAMP.length = 0;
+      d.campanhas.forEach(r => CAMP.push({
+        key: r.key, nome: r.nome,
+        acoes: +r.acoes, ent: +r.ent,
+        ab: +r.ab, ctr: +r.ctr, opt: 0,
+        est: !!r.est, rela: !!r.rela
+      }));
+    }
+
+    // ── 2. Evolução mensal de e-mail (agregada por mês a partir de email_acoes)
+    // Valores absolutos do Apps Script → divide por 1.000 para o gráfico (em milhares)
+    if (d.emailMensal?.length) {
+      MOS.length = 0; MOD.length = 0;
+      const mNomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+      d.emailMensal.forEach(r => {
+        MOS.push(r.mes);
+        const [m, a] = r.mes.split('/');
+        MOD.push(new Date(2000 + +a, mNomes.indexOf(m), 1));
+      });
+      EM.disp = d.emailMensal.map(r => Math.round(+r.disp / 1000));
+      EM.ent  = d.emailMensal.map(r => Math.round(+r.ent  / 1000));
+      EM.inv  = d.emailMensal.map(r => Math.round(+r.inv  / 1000));
+      EM.ab   = d.emailMensal.map(r => Math.round(+r.ab   / 1000));
+      EM.cl   = d.emailMensal.map(r => Math.round(+r.cl   / 1000));
+    }
+
+    // ── 3. Qualidade da base (estimado — aba manual)
+    if (d.qualidade?.length) {
+      d.qualidade.forEach(r => {
+        const u = r.unidade;
+        if (!QD[u]) QD[u] = {};
+        Object.assign(QD[u], {
+          total: +r.total, qual: +r.qual,
+          emailInv: +r.email_inv, numInv: +r.num_inv,
+          dupl: +r.dupl, sub: r.sub
+        });
+      });
+    }
+
+    // ── 4. Crescimento da base por mês (estimado — aba manual)
+    if (d.qualidadecrescimento?.length) { // Apps Script normaliza cabeçalho para minúsculo
+      const unidades = [...new Set(d.qualidadecrescimento.map(r => r.unidade))];
+      unidades.forEach(u => {
+        if (!QD[u]) return;
+        const linhas = d.qualidadecrescimento
+          .filter(r => r.unidade === u)
+          .sort((a, b) => +a.ordem - +b.ordem);
+        QD[u].novos  = linhas.map(r => +r.novos);
+        QD[u].saidas = linhas.map(r => +r.saidas);
+      });
+    }
+
+    // ── 5. Operação — fila de disparos (estimado — aba manual)
+    if (d.operacao?.length) {
+      const unids = [...new Set(d.operacao.map(r => r.unidade))];
+      unids.forEach(u => {
+        if (!OP[u]) return;
+        OP[u].disparos = d.operacao
+          .filter(r => r.unidade === u)
+          .map(r => ({
+            camp: r.campanha, canal: r.canal,
+            ok: r.status === 'Enviado',
+            vol: +r.volume, ag: r.agendado, fila: r.tfila
+          }));
+      });
+    }
+
+    // ── 6. Registro de Interesse — doughnuts (calculados pelo Apps Script)
+    // interesseNivel: { CAS:[{nivel,pct}], SJC:[], todas:[] }
+    // interessePeriodo: { CAS:[{periodo,pct}], SJC:[], todas:[] }
+    const CORES_NIVEL   = ['#5DBE8A','#F47920','#2BB5C8','#F5C842','#7C6EDB','#1B2E5A','#E05050'];
+    const CORES_PERIODO = ['#1B2E5A','#F47920','#2BB5C8'];
+    const NIVEL_SHORT   = {'Graduação':'Grad.','Livre':'Livre','Técnico':'Técnico',
+                           'Extensão':'Ext.','Pós-Graduação':'Pós-Grad','Outros':'Outros'};
+    const BADGE_MAP     = {'Graduação':'info','Livre':'ok','Técnico':'warn',
+                           'Extensão':'info','Pós-Graduação':'pu','Outros':'ok'};
+
+    const unidsI = ['CAS','SJC','todas'];
+    unidsI.forEach(u => {
+      // Inicializa iData[u] preservando o que já existe de estático
+      if (!iData[u]) iData[u] = {};
+
+      // Nível de ensino → doughnut esquerdo
+      if (d.interessenivel?.[u]?.length) {
+        const nArr = d.interessenivel[u];
+        iData[u].nL = nArr.map(n => n.nivel);
+        iData[u].nD = nArr.map(n => n.pct);
+        iData[u].nC = nArr.map((_, i) => CORES_NIVEL[i % CORES_NIVEL.length]);
+      }
+
+      // Período do dia → doughnut direito
+      if (d.interesseperiodo?.[u]?.length) {
+        const pArr = d.interesseperiodo[u];
+        iData[u].pL = pArr.map(p => p.periodo);
+        iData[u].pD = pArr.map(p => p.pct);
+        iData[u].pC = CORES_PERIODO.slice(0, pArr.length);
+      }
+
+      iData[u].title = 'Top cursos por interesse — ' + (u === 'todas' ? 'Todas as unidades' : u);
+    });
+    iData.GCR = iData.todas; // GCR = visão consolidada
+
+    // ── 7. Top cursos (linha = curso do Relatório 9/10; filtrado por unidade no cliente)
+    if (d.interessecursos?.length) {
+      unidsI.forEach(u => {
+        if (!iData[u]) iData[u] = {};
+        const filtrado = d.interessecursos
+          .filter(r => u === 'todas' || r.unidade === u)
+          .sort((a, b) => +b.total_interessados - +a.total_interessados)
+          .slice(0, 10);
+        iData[u].cursos = filtrado.map(r => [
+          r.curso + (u === 'todas' ? ' (' + r.unidade + ')' : ''),
+          NIVEL_SHORT[r.nivel_de_ensino] || r.nivel_de_ensino || '—',
+          BADGE_MAP[r.nivel_de_ensino] || 'ok',
+          r.subarea || '—',
+          (+r.total_interessados || 0).toLocaleString('pt-BR')
+        ]);
+      });
+    }
+
+    // ── 8. Timestamp
+    if (d.meta?.atualizadoEm) {
+      document.getElementById('metaTime').textContent = d.meta.atualizadoEm;
+    }
+
+    // ── Reconstrói charts e re-renderiza todas as abas
+    [chartEl, chartQcr, chartQdc, chartOp, chartIp, chartPp].forEach(c => c && c.destroy());
+    mkCharts();
+    renderEmail(); renderCampOverview();
+    renderQualidade(); renderOperacao();
+    renderInteresse(ST.unit === 'todas' ? 'todas' : ST.unit);
+
+    banner.innerHTML = '✓&nbsp; Dados atualizados · planilha: ' + (d.meta?.planilha || '') +
+                       ' · ' + (d.meta?.atualizadoEm || '') +
+                       ' · ' + (d.meta?.linhasEmail || 0) + ' ações de e-mail, ' +
+                       (d.meta?.linhasSms || 0) + ' ações de SMS, ' +
+                       (d.meta?.linhasInteresse || 0) + ' cursos';
+    banner.style.color = '#15803D';
+    setTimeout(() => { banner.style.display = 'none'; banner.style.color = ''; }, 5000);
+
+  } catch (err) {
+    banner.innerHTML = '⚠&nbsp; Falha ao carregar planilha (' + err.message + '). Exibindo dados estáticos.';
+    banner.style.color = '#B91C1C';
+    setTimeout(() => { banner.style.display = 'none'; banner.style.color = ''; }, 7000);
+  }
+}
+
+// Email mensal (milhares) — Jan-Mar real, Abr-Mai estimado
+const EM={disp:[1940,1820,5200,2100,1600],ent:[1930,1810,5170,2085,1590],inv:[10,10,30,15,10],ab:[424,380,520,350,260],cl:[20,18,28,17,13]};
+
+// Campanhas — acoes: real (relatórios 5,6) | ab/ctr: real onde disponível
+const CAMP=[
+  {key:'pos_grad',      nome:'pos_graduacao | Inscrições prorrogadas',               acoes:12,  ent:22681,   ab:85.4,ctr:2.2,opt:0.1},
+  {key:'vestibular',    nome:'vestibular_1_semestre_2026_presencial_GCR',             acoes:7,   ent:25161,   ab:70.1,ctr:1.8,opt:0.2},
+  {key:'processo_sel1', nome:'processo_sel_EAD_2026_1_GCR',                          acoes:28,  ent:235718,  ab:30.6,ctr:0.9,opt:0.4},
+  {key:'processo_sel2', nome:'processo_sel_EAD_2026_2_GCR',                          acoes:47,  ent:180421,  ab:28.3,ctr:0.8,opt:0.4,est:true},
+  {key:'idiomas',       nome:'idiomas_2026_GCR',                                      acoes:5,   ent:302667,  ab:20.3,ctr:1.3,opt:0.6},
+  {key:'cursos_tec',    nome:'rede_ead_cursos_tecnicos_2026_GCR',                    acoes:4,   ent:372693,  ab:21.2,ctr:3.2,opt:0.8},
+  {key:'institucional', nome:'campanha_institucional_2026_GCR',                      acoes:13,  ent:131978,  ab:15.1,ctr:0.6,opt:0.7,est:true},
+  {key:'meu_senac',     nome:'meu_senac_2026_GCR',                                   acoes:7,   ent:92415,   ab:18.5,ctr:0.8,opt:0.3,est:true},
+  {key:'avisos',        nome:'avisos_2026_GCR',                                       acoes:1,   ent:471738,  ab:10.2,ctr:0.3,opt:0.5},
+  {key:'cursos_livres', nome:'cursos_livres_2026_GCR',                                acoes:1,   ent:1185783, ab:5.9, ctr:0.5,opt:1.2},
+  {key:'regua',         nome:'Régua de Relacionamento (EDS + Aniversário + Conclusão)',acoes:204,ent:9563944, ab:14.8,ctr:0.1,opt:0.2,est:true,rela:true},
+];
+
+// Ações por campanha
+const DETAIL={
+  pos_grad:{acoes:[{nome:'e-mail1_pos_1_semestre_2026_inscricoes_prorrogadas_GCR',ent:22681,ab:85.4,ctr:2.2,obs:'Audiência qualificada — interesse declarado'}]},
+  vestibular:{acoes:[
+    {nome:'e-mail1_vestibular_1_sem_2026_inscricoes_abertas_GCR',ent:8420,ab:48.1,ctr:2.1,obs:''},
+    {nome:'e-mail2_vestibular_1_sem_2026_lembrete_GCR',ent:7310,ab:41.3,ctr:1.9,obs:''},
+    {nome:'e-mail3_vestibular_1_sem_2026_penultimos_dias_GCR',ent:5210,ab:33.7,ctr:1.6,obs:''},
+    {nome:'e-mail4_vestibular_1_sem_2026_ultimos_dias_GCR',ent:4221,ab:70.1,ctr:1.8,obs:'Urgência — melhor taxa da campanha'},
+  ]},
+  processo_sel1:{acoes:[
+    {nome:'e-mail1_peca_geral_processo_seletivo_EAD_2026_1',ent:8420,ab:32.1,ctr:1.0,obs:''},
+    {nome:'e-mail2_peca_geral_processo_seletivo_EAD_2026_1',ent:8210,ab:30.6,ctr:0.9,obs:''},
+    {nome:'e-mail3_peca_geral_processo_seletivo_EAD_2026_1',ent:7980,ab:28.4,ctr:0.8,obs:''},
+    {nome:'... + 25 ações (1 por curso EAD)',ent:211108,ab:30.2,ctr:0.9,obs:'Ações individuais por curso'},
+  ]},
+  processo_sel2:{acoes:[
+    {nome:'e-mail1_processo_seletivo_EAD_2026_2_GCR',ent:6120,ab:30.1,ctr:0.9,obs:''},
+    {nome:'e-mail2_processo_seletivo_EAD_2026_2_GCR',ent:5980,ab:27.8,ctr:0.8,obs:''},
+    {nome:'... + 45 ações (1 por curso EAD)',ent:168321,ab:27.9,ctr:0.8,obs:'est. — ações individuais por curso'},
+  ]},
+  idiomas:{acoes:[
+    {nome:'e-mail1_idiomas_institucional_2026_GCR',ent:75000,ab:22.3,ctr:1.5,obs:''},
+    {nome:'e-mail2_idiomas_ingles_2026_GCR',ent:68000,ab:21.0,ctr:1.3,obs:''},
+    {nome:'e-mail3_idiomas_espanhol_2026_GCR',ent:58000,ab:19.8,ctr:1.2,obs:''},
+    {nome:'e-mail4_idiomas_outros_2026_GCR',ent:57200,ab:18.4,ctr:1.1,obs:''},
+    {nome:'e-mail5_idiomas_reforco_2026_GCR',ent:44467,ab:19.7,ctr:1.2,obs:'est.'},
+  ]},
+  cursos_tec:{acoes:[
+    {nome:'email1_cursos_tecnicos_ead_sp_2026',ent:120000,ab:23.1,ctr:3.5,obs:''},
+    {nome:'email2_cursos_tecnicos_ead_sp_2026',ent:98000,ab:22.0,ctr:3.3,obs:''},
+    {nome:'email3_cursos_tecnicos_ead_sp_2026',ent:87000,ab:19.8,ctr:3.0,obs:''},
+    {nome:'email4_cursos_tecnicos_ead_sp_2026',ent:67693,ab:19.5,ctr:2.9,obs:'est.'},
+  ]},
+  institucional:{acoes:[{nome:'e-mail1_quer_fazer_senac_2026_GCR',ent:131978,ab:15.1,ctr:0.6,obs:''}]},
+  meu_senac:{acoes:[
+    {nome:'e-mail1_meu_senac_alunos_cursando_2026_GCR',ent:18000,ab:21.4,ctr:1.0,obs:''},
+    {nome:'e-mail2_meu_senac_responsaveis_2026_GCR',ent:15200,ab:19.8,ctr:0.9,obs:''},
+    {nome:'... + 5 ações de acompanhamento',ent:59215,ab:16.7,ctr:0.6,obs:'est.'},
+  ]},
+  avisos:{acoes:[{nome:'e-mail1_divulgacao_evento_eu_profissional_2026_GCR',ent:471738,ab:10.2,ctr:0.3,obs:''}]},
+  cursos_livres:{acoes:[{nome:'e-mail1_cursos_livres_ex_alunos_interesses_ocorrencias_2026',ent:1185783,ab:5.9,ctr:0.5,obs:'Base ampla — lista genérica de massa'}]},
+};
+
+// Qualidade por unidade — GCR/Todas: real | CAS/SJC: estimado
+const QD={
+  todas:{total:1284900,qual:82.4,emailInv:12.3,numInv:8.7,dupl:3.1,sub:'Base Única — todas as unidades',
+    novos:[4200,3800,5100,4700,5900],saidas:[-1100,-900,-1300,-1200,-1500]},
+  GCR:  {total:1284900,qual:82.4,emailInv:12.3,numInv:8.7,dupl:3.1,sub:'Base Única — Gerência GCR',
+    novos:[4200,3800,5100,4700,5900],saidas:[-1100,-900,-1300,-1200,-1500]},
+  CAS:  {total:820000, qual:84.1,emailInv:11.5,numInv:8.1, dupl:2.8,sub:'Contatos com interesse em CAS · estimado',
+    novos:[2800,2600,3400,3200,3900],saidas:[-700,-600,-850,-780,-980]},
+  SJC:  {total:98000,  qual:78.9,emailInv:16.2,numInv:10.1,dupl:4.5,sub:'Contatos com interesse em SJC · estimado',
+    novos:[350,310,420,380,480],saidas:[-90,-75,-105,-98,-130]},
+};
+
+// Operação por unidade
+const OP={
+  todas:{fila:3,tempo:'~1h',sub:'Grandes volumes (1M+) · &lt;5min para &lt;10K dest.',
+    ftnt:'Março com pico causado pelo cursos_livres (1,18M dest.). Tempo estimado com base em agendamento vs envio.',
+    mfila:[45,52,180,60,35],
+    disparos:[
+      {camp:'cursos_livres_2026_GCR',canal:'E-mail',ok:true,vol:1185783,ag:'23/03 12:00',fila:'~4h'},
+      {camp:'avisos_2026_GCR | Eu Profissional',canal:'E-mail',ok:true,vol:471750,ag:'05/03 16:30',fila:'~2h'},
+      {camp:'campanha_institucional_2026_GCR',canal:'E-mail',ok:true,vol:131978,ag:'12/03 15:30',fila:'~30min'},
+      {camp:'pos_graduacao | Inscrições prorrogadas',canal:'E-mail',ok:true,vol:22681,ag:'05/03 14:30',fila:'<5min'},
+      {camp:'vestibular_2_semestre_2026_presencial_GCR',canal:'E-mail',ok:false,vol:174778,ag:'26/05 15:00',fila:'~45min'},
+    ]},
+  GCR:{fila:3,tempo:'~1h',sub:'Grandes volumes (1M+) · &lt;5min para &lt;10K dest.',
+    ftnt:'Março com pico causado pelo cursos_livres (1,18M dest.). Tempo estimado.',
+    mfila:[45,52,180,60,35],
+    disparos:[
+      {camp:'cursos_livres_2026_GCR',canal:'E-mail',ok:true,vol:1185783,ag:'23/03 12:00',fila:'~4h'},
+      {camp:'avisos_2026_GCR | Eu Profissional',canal:'E-mail',ok:true,vol:471750,ag:'05/03 16:30',fila:'~2h'},
+      {camp:'campanha_institucional_2026_GCR',canal:'E-mail',ok:true,vol:131978,ag:'12/03 15:30',fila:'~30min'},
+      {camp:'pos_graduacao | Inscrições prorrogadas',canal:'E-mail',ok:true,vol:22681,ag:'05/03 14:30',fila:'<5min'},
+      {camp:'vestibular_2_semestre_2026_presencial_GCR',canal:'E-mail',ok:false,vol:174778,ag:'26/05 15:00',fila:'~45min'},
+    ]},
+  CAS:{fila:0,tempo:'<5min',sub:'SMS operacional · sem fila de espera',
+    ftnt:'SMS CAS: disparos pontuais com volume &lt;2k destinatários. Tempo de fila irrelevante.',
+    mfila:[2,3,4,3,2],
+    disparos:[
+      {camp:'processo_seletivo_graduação_EAD_1_entrada_2026',canal:'SMS',ok:true,vol:1358,ag:'08/01 10:00',fila:'<5min'},
+      {camp:'pos_graduacao_1_entrada_2026_EAD',canal:'SMS',ok:true,vol:1239,ag:'08/01 13:00',fila:'<5min'},
+      {camp:'pos_graduacao_2_entrada_2026_EAD',canal:'SMS',ok:true,vol:1107,ag:'10/02 10:30',fila:'<5min'},
+      {camp:'vestibular_1_semestre_2026_presencial',canal:'SMS',ok:true,vol:616,ag:'09/01 11:00',fila:'<5min'},
+      {camp:'graduacao_1_semestre_2026_EAD',canal:'SMS',ok:true,vol:418,ag:'28/01 11:00',fila:'<5min'},
+    ]},
+  SJC:{fila:0,tempo:'<5min',sub:'SMS operacional · sem fila de espera',
+    ftnt:'SMS SJC: avisos de turma com volumes &lt;100 destinatários por ação.',
+    mfila:[1,2,2,1,1],
+    disparos:[
+      {camp:'avisos_2026_SJC — 13 ações (jan–mar)',canal:'SMS',ok:true,vol:266,ag:'Jan–Mar/26',fila:'<5min'},
+    ]},
+};
+
+// Interesse — dados reais dos relatórios 9 e 10
+const iData={
+  CAS:{
+    nL:['Graduação','Livre','Extensão','Pós-Grad','Técnico','Outros'],nD:[54.6,22.2,17.4,3.3,1.7,0.8],
+    nC:['#5DBE8A','#F47920','#2BB5C8','#7C6EDB','#F5C842','#1B2E5A'],
+    pL:['Noite','Manhã','Tarde'],pD:[43.1,31.6,25.3],pC:['#1B2E5A','#F47920','#2BB5C8'],
+    title:'Top cursos por interesse — CAS',
+    cursos:[
+      ['Análise e Des. de Sistemas — Tecnologia','Grad.','info','TI E DESENV DE SISTEMAS','1.640'],
+      ['Ciência da Computação — Bacharelado','Grad.','info','TI E DESENV DE SISTEMAS','432'],
+      ['Gastronomia — Tecnologia','Grad.','info','COZINHA','358'],
+      ['Educação Física — Bacharelado','Grad.','info','ATIVIDADES FÍSICAS','345'],
+      ['Estética e Cosmética — Tecnologia','Grad.','info','ESTÉTICA','327'],
+      ['Estética e Cosmética — Bacharelado','Grad.','info','ESTÉTICA','237'],
+      ['Design de Moda — Bacharelado','Grad.','info','MODA','222'],
+      ['Nutrição — Bacharelado','Grad.','info','NUTRIÇÃO','219'],
+      ['Publicidade e Propaganda — Bacharelado','Grad.','info','COMUNICAÇÃO SOCIAL','219'],
+      ['Inglês Básico','Livre','ok','INGLÊS','216'],
+    ]
+  },
+  SJC:{
+    nL:['Livre','Técnico','Outros'],nD:[76.4,21.4,2.2],nC:['#F47920','#F5C842','#1B2E5A'],
+    pL:['Noite','Manhã','Tarde'],pD:[39.5,32.8,27.7],pC:['#1B2E5A','#F47920','#2BB5C8'],
+    title:'Top cursos por interesse — SJC',
+    cursos:[
+      ['Técnico em Segurança do Trabalho','Técnico','warn','SEGURANÇA E SAÚDE NO TRABALHO','101'],
+      ['Técnico em Enfermagem','Técnico','warn','ENFERMAGEM','97'],
+      ['Alongamento de Cílios','Livre','ok','BELEZA','96'],
+      ['Técnico em Farmácia','Técnico','warn','FARMÁCIA','95'],
+      ['Técnico em Nutrição e Dietética','Técnico','warn','NUTRIÇÃO','73'],
+      ['Técnico em Administração','Técnico','warn','ADMINISTRAÇÃO GERAL','70'],
+      ['Técnico em Gastronomia','Técnico','warn','COZINHA','62'],
+      ['Língua Brasileira de Sinais 1','Livre','ok','LIBRAS','60'],
+      ['Bolos e Tortas Doces','Livre','ok','PRODUÇÃO DE ALIMENTOS','59'],
+      ['Cabeleireiro','Livre','ok','BELEZA','58'],
+    ]
+  },
+  todas:{
+    nL:['Livre','Graduação','Extensão','Técnico','Pós-Grad','Outros'],nD:[39.5,37.1,11.8,8.0,2.3,1.3],
+    nC:['#F47920','#5DBE8A','#2BB5C8','#F5C842','#7C6EDB','#1B2E5A'],
+    pL:['Noite','Manhã','Tarde'],pD:[41.8,32.0,26.2],pC:['#1B2E5A','#F47920','#2BB5C8'],
+    title:'Top cursos por interesse — Todas as unidades',
+    cursos:[
+      ['Análise e Des. de Sistemas — Tecnologia (CAS)','Grad.','info','TI E DESENV DE SISTEMAS','1.640'],
+      ['Ciência da Computação — Bacharelado (CAS)','Grad.','info','TI E DESENV DE SISTEMAS','432'],
+      ['Gastronomia — Tecnologia (CAS)','Grad.','info','COZINHA','358'],
+      ['Educação Física — Bacharelado (CAS)','Grad.','info','ATIVIDADES FÍSICAS','345'],
+      ['Estética e Cosmética — Tecnologia (CAS)','Grad.','info','ESTÉTICA','327'],
+      ['Técnico em Segurança do Trabalho (SJC)','Técnico','warn','SEGURANÇA E SAÚDE NO TRABALHO','101'],
+      ['Técnico em Enfermagem (SJC)','Técnico','warn','ENFERMAGEM','97'],
+      ['Alongamento de Cílios (SJC)','Livre','ok','BELEZA','96'],
+      ['Técnico em Farmácia (SJC)','Técnico','warn','FARMÁCIA','95'],
+      ['Inglês Básico (CAS)','Livre','ok','INGLÊS','216'],
+    ]
+  }
+};
+iData.GCR=iData.todas;
+
+// ─── CHARTS ───────────────────────────────────────────────────────────────────
+let chartEl=null,chartQcr=null,chartQdc=null,chartOp=null,chartIp=null,chartPp=null;
+
+function mkCharts(){
+  chartEl=new Chart(document.getElementById('cEl'),{type:'line',data:{labels:MOS,datasets:[
+    {data:EM.disp,borderColor:'#1B2E5A',pointRadius:3,borderWidth:2,fill:false,tension:0.3},
+    {data:EM.ent, borderColor:'#F47920',pointRadius:3,borderWidth:2,fill:false,tension:0.3},
+    {data:EM.inv, borderColor:'#E05050',pointRadius:3,borderWidth:2,fill:false,tension:0.3},
+    {data:EM.ab,  borderColor:'#2BB5C8',pointRadius:3,borderWidth:2,fill:false,tension:0.3},
+    {data:EM.cl,  borderColor:'#F5C842',pointRadius:3,borderWidth:2,fill:false,tension:0.3},
+  ]},options:{...base,scales:{x:xa,y:{...ya}}}});
+
+  chartQcr=new Chart(document.getElementById('cQcr'),{type:'bar',data:{labels:MOS,datasets:[
+    {data:QD.todas.novos, backgroundColor:'#5DBE8A',borderRadius:3,label:'Novos'},
+    {data:QD.todas.saidas,backgroundColor:'#E8B0B0',borderRadius:3,label:'Saídas'},
+  ]},options:{...base,scales:{x:{...xa,stacked:true},y:{grid:{color:'#F3F4F6'},stacked:true,ticks:{font:{size:10},color:'#9CA3AF',callback:v=>Math.abs(v)>=1000?(v<0?'-':'')+(Math.abs(v)/1000).toFixed(0)+'k':v}}}}});
+
+  chartQdc=new Chart(document.getElementById('cQdc'),{type:'bar',data:{
+    labels:['cursos_livres','meu_senac','avisos','cursos_tec.','idiomas','pos_grad'],
+    datasets:[{data:[1.2,0.3,0.5,0.8,0.6,0.1],backgroundColor:['#E05050','#5DBE8A','#F5C842','#F47920','#F47920','#5DBE8A'],borderRadius:4}]
+  },options:{...base,scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#9CA3AF'}},y:{grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF',callback:v=>v+'%'},max:1.5}}}});
+
+  chartOp=new Chart(document.getElementById('cOp'),{type:'line',data:{labels:MOS,datasets:[
+    {data:OP.todas.mfila,borderColor:'#F47920',backgroundColor:'rgba(244,121,32,0.08)',fill:true,pointRadius:4,borderWidth:2,tension:0.3}
+  ]},options:{...base,scales:{x:xa,y:{grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF',callback:v=>v+' min'},min:0,max:200}}}});
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+const fmtN=n=>n.toLocaleString('pt-BR');
+const f1=v=>v.toFixed(1); const f2=v=>v.toFixed(2);
+
+function parseDate(s){
+  const p=s.trim().split('/');
+  if(p.length!==3||p[2].length!==4) return null;
+  const d=new Date(+p[2],+p[1]-1,+p[0]);
+  return isNaN(d)?null:d;
+}
+
+// FIX #4 — inclui mês se QUALQUER dia do mês sobrepõe o intervalo
+function getMesIdx(){
+  return MOD.map((d,i)=>{
+    const end=new Date(d.getFullYear(),d.getMonth()+1,0);
+    return (d<=ST.to && end>=ST.from)?i:-1;
+  }).filter(i=>i>=0);
+}
+
+// FIX #10 — badge positivo para taxas excepcionais
+function abBadge(v){
+  if(v>=70) return `<span class="highlight-pos" title="Taxa excepcional — audiência altamente qualificada">★ ${f1(v)}%</span>`;
+  if(v>=25) return `<span class="badge ok">${f1(v)}%</span>`;
+  if(v>=10) return `<span class="badge warn">${f1(v)}%</span>`;
+  return `<span class="badge bad">${f1(v)}%</span>`;
+}
+function ctrBadge(v){
+  if(v>=1.5) return `<span class="badge ok">${f2(v)}%</span>`;
+  if(v>=0.5) return `<span class="badge warn">${f2(v)}%</span>`;
+  return `<span class="badge bad">${f2(v)}%</span>`;
+}
+
+// FIX #6 — barras proporcionais calculadas em JS
+function renderOptBars(items){
+  const max=Math.max(...items.map(c=>c.opt||0),0.01);
+  document.getElementById('eOptBars').innerHTML=items.map(c=>`
+    <div class="opt-bar">
+      <div class="opt-label">${c.nome}</div>
+      <div class="opt-fill" style="width:${Math.round((c.opt/max)*100)}px"></div>
+      <div class="opt-val">${f1(c.opt)}%</div>
+    </div>`).join('');
+  const total=items.reduce((s,c)=>s+c.ent*(c.opt/100),0);
+  document.getElementById('eOptTotal').textContent='~'+fmtN(Math.round(total/1000)*1000);
+}
+
+// ─── RENDER EMAIL ─────────────────────────────────────────────────────────────
+function renderEmail(){
+  const gcr=ST.unit==='todas'||ST.unit==='GCR';
+  document.getElementById('eGCR').style.display=gcr?'block':'none';
+  document.getElementById('eNoData').style.display=gcr?'none':'block';
+  if(!gcr){document.getElementById('eNoDataUnit').textContent=ST.unit;return;}
+
+  // FIX #5 — label dinâmico
+  document.getElementById('unidadeLabel').textContent={todas:'Todas as unidades',GCR:'GCR'}[ST.unit];
+  document.getElementById('periodoLabel').textContent=
+    document.getElementById('dtFrom').value+' – '+document.getElementById('dtTo').value;
+
+  const idx=getMesIdx();
+  if(idx.length===0) return;
+  const td=idx.reduce((s,i)=>s+EM.disp[i],0)*1000;
+  const te=idx.reduce((s,i)=>s+EM.ent[i],0)*1000;
+  const ti=idx.reduce((s,i)=>s+EM.inv[i],0)*1000;
+  const ta=idx.reduce((s,i)=>s+EM.ab[i],0)*1000;
+  const tc=idx.reduce((s,i)=>s+EM.cl[i],0)*1000;
+
+  document.getElementById('eDisp').textContent=fmtN(td);
+  document.getElementById('eEnt').textContent=fmtN(te);
+  document.getElementById('eInv').textContent=fmtN(ti);
+  document.getElementById('eAb').textContent=fmtN(ta);
+  document.getElementById('eCl').textContent=fmtN(tc);
+  // FIX #7 — subtítulo de % inválidos atualiza com filtro
+  document.getElementById('eInvSub').textContent='Hard bounce · '+(td>0?(ti/td*100).toFixed(1):'0')+'%';
+  if(te>0){
+    document.getElementById('eTxEnt').textContent=(te/td*100).toFixed(1)+'%';
+    document.getElementById('eTxAb').textContent=(ta/te*100).toFixed(1)+'%';
+    document.getElementById('eCtr').textContent=(tc/te*100).toFixed(2)+'%';
+  }
+
+  // FIX #3 — gráfico atualiza com filtro de data
+  if(chartEl){
+    chartEl.data.labels=idx.map(i=>MOS[i]);
+    [EM.disp,EM.ent,EM.inv,EM.ab,EM.cl].forEach((arr,di)=>{chartEl.data.datasets[di].data=idx.map(i=>arr[i]);});
+    chartEl.update();
+  }
+
+  // FIX #1 — campanha funcional
+  ST.campanha?renderCampDetail(ST.campanha):renderCampOverview();
+}
+
+function renderCampOverview(){
+  document.getElementById('campBanner').style.display='none';
+  document.getElementById('eTabTitle').textContent='Performance por campanha';
+  const comerciais=CAMP.filter(c=>!c.rela);
+  const regua=CAMP.find(c=>c.rela);
+  const rows=comerciais.map(c=>`
+    <tr>
+      <td style="font-size:10px">${c.nome}${c.est?' <sup style="color:#7C6EDB">¹</sup>':''}</td>
+      <td style="text-align:center;font-size:9px;color:#6B7280">${c.acoes}</td>
+      <td class="nr">${fmtN(c.ent)}</td>
+      <td class="rr">${abBadge(c.ab)}</td>
+      <td class="rr">${ctrBadge(c.ctr)}</td>
+    </tr>`).join('');
+  const rRow=regua?`<tr class="rela-row">
+    <td style="font-size:10px">${regua.nome} <sup style="color:#7C6EDB">¹</sup></td>
+    <td style="text-align:center;font-size:9px">${regua.acoes}</td>
+    <td class="nr">${fmtN(regua.ent)}</td>
+    <td class="rr">${abBadge(regua.ab)}</td>
+    <td class="rr">${ctrBadge(regua.ctr)}</td>
+  </tr>`:'' ;
+  const tot=CAMP.reduce((s,c)=>s+c.ent,0);
+  document.getElementById('eTabBody').innerHTML=`
+    <table>
+      <thead><tr><th>Campanha</th><th style="text-align:center">Ações</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th></tr></thead>
+      <tbody>${rows}${rRow}</tbody>
+      <tfoot class="tfoot"><tr><td colspan="2"><strong>Total geral</strong></td><td class="nr"><strong>${fmtN(tot)}</strong></td><td></td><td></td></tr></tfoot>
+    </table>
+    <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Estimado. Régua = envios diários automatizados (EDS início de curso, Aniversário de Vida, Conclusão de Curso). Clique em uma campanha no filtro para ver o detalhamento por ação.</div>`;
+  renderOptBars([...comerciais].sort((a,b)=>b.opt-a.opt));
+}
+
+function renderCampDetail(key){
+  const c=CAMP.find(c=>c.key===key);
+  if(!c){renderCampOverview();return;}
+  document.getElementById('campBanner').style.display='flex';
+  document.getElementById('campBannerNome').textContent='📧 '+c.nome;
+  document.getElementById('eTabTitle').textContent='Ações da campanha · '+c.acoes+' ações';
+  const d=DETAIL[key];
+  if(!d){document.getElementById('eTabBody').innerHTML='<div style="font-size:11px;color:#9CA3AF;padding:16px;text-align:center">Detalhamento por ação disponível após integração com CRM</div>';return;}
+  document.getElementById('eTabBody').innerHTML=`
+    <table>
+      <thead><tr><th>Ação</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th><th>Observação</th></tr></thead>
+      <tbody>${d.acoes.map(a=>`
+        <tr>
+          <td style="font-size:9px">${a.nome}</td>
+          <td class="nr">${fmtN(a.ent)}</td>
+          <td class="rr">${abBadge(a.ab)}</td>
+          <td class="rr">${ctrBadge(a.ctr)}</td>
+          <td style="font-size:9px;color:#6B7280">${a.obs}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  renderOptBars([c]);
+}
+
+function voltarGeral(){
+  document.getElementById('campSel').value='';
+  ST.campanha='';
+  renderCampOverview();
+}
+
+// ─── RENDER QUALIDADE ─────────────────────────────────────────────────────────
+function renderQualidade(){
+  const d=QD[ST.unit]||QD.todas;
+  const uMap={todas:'Geral',GCR:'GCR',CAS:'CAS',SJC:'SJC'};
+  document.getElementById('qUnidLabel').textContent=uMap[ST.unit]||'Geral';
+  document.getElementById('qTotal').textContent=fmtN(d.total);
+  document.getElementById('qTotalSub').textContent=d.sub;
+  document.getElementById('qQual').textContent=f1(d.qual)+'%';
+  document.getElementById('qEmailInv').textContent=f1(d.emailInv)+'%';
+  document.getElementById('qNumInv').textContent=f1(d.numInv)+'%';
+  document.getElementById('qDupl').textContent=f1(d.dupl)+'%';
+  if(chartQcr){chartQcr.data.datasets[0].data=d.novos;chartQcr.data.datasets[1].data=d.saidas;chartQcr.update();}
+}
+
+// ─── RENDER OPERAÇÃO ──────────────────────────────────────────────────────────
+function renderOperacao(){
+  const d=OP[ST.unit]||OP.todas;
+  document.getElementById('oFila').textContent=d.fila;
+  document.getElementById('oTempo').textContent=d.tempo;
+  document.getElementById('oTempoSub').innerHTML=d.sub;
+  document.getElementById('oFtnt').innerHTML=`<sup style="color:#7C6EDB">¹</sup> ${d.ftnt}`;
+  document.getElementById('oTabBody').innerHTML=`
+    <table>
+      <thead><tr><th>Campanha / Ação</th><th>Canal</th><th>Status</th><th class="nr">Volume</th><th>Agendado</th><th>T. fila <sup style="color:#7C6EDB">¹</sup></th></tr></thead>
+      <tbody>${d.disparos.map(r=>`
+        <tr>
+          <td style="font-size:10px">${r.camp}</td>
+          <td style="font-size:10px">${r.canal}</td>
+          <td><span style="display:inline-flex;align-items:center;gap:4px">
+            <span class="status-dot" style="background:${r.ok?'#5DBE8A':'#F5C842'}"></span>${r.ok?'Enviado':'Em fila'}
+          </span></td>
+          <td class="nr">${fmtN(r.vol)}</td>
+          <td style="font-size:10px">${r.ag}</td>
+          <td style="font-size:10px">${r.fila}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  if(chartOp){chartOp.data.datasets[0].data=d.mfila;chartOp.update();}
+}
+
+// ─── RENDER INTERESSE ─────────────────────────────────────────────────────────
+function renderInteresse(unit){
+  const d=iData[unit]||iData.todas;
+  document.getElementById('tabelaTitle').textContent=d.title;
+  document.getElementById('tabelaBody').innerHTML=d.cursos.map(c=>`
+    <tr>
+      <td style="font-size:10px">${c[0]}</td>
+      <td><span class="badge ${c[2]}">${c[1]}</span></td>
+      <td style="font-size:9px;color:#6B7280;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c[3]}">${c[3]}</td>
+      <td class="nr" style="${c[4]==='1.640'?'font-weight:600;color:#F47920':''}">${c[4]}</td>
+    </tr>`).join('');
+  if(chartIp){chartIp.destroy();chartPp.destroy();}
+  chartIp=new Chart(document.getElementById('cIp'),{type:'doughnut',data:{labels:d.nL,datasets:[{data:d.nD,backgroundColor:d.nC,borderWidth:2,borderColor:'white'}]},options:{...base,cutout:'55%'}});
+  chartPp=new Chart(document.getElementById('cPp'),{type:'doughnut',data:{labels:d.pL,datasets:[{data:d.pD,backgroundColor:d.pC,borderWidth:2,borderColor:'white'}]},options:{...base,cutout:'55%'}});
+  document.getElementById('legNivel').innerHTML=d.nL.map((l,i)=>`<div class="li"><span class="ld" style="background:${d.nC[i]}"></span>${l} ${d.nD[i]}%</div>`).join('');
+  document.getElementById('legPeriodo').innerHTML=d.pL.map((l,i)=>`<div class="li"><span class="ld" style="background:${d.pC[i]}"></span>${l} ${d.pD[i]}%</div>`).join('');
+}
+
+// ─── HANDLERS ─────────────────────────────────────────────────────────────────
+function sw(id,btn){
+  ['te','ts','tq','to','ti'].forEach(t=>document.getElementById(t).style.display='none');
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('act'));
+  document.getElementById('t'+id).style.display='block';
+  btn.classList.add('act');
+  // Chart.js não consegue medir canvas em tabs ocultas — força resize ao exibir
+  // setTimeout 50ms garante que o browser terminou o layout antes de medir o canvas
+  if(id==='i'&&chartIp&&chartPp){setTimeout(()=>{chartIp.resize();chartPp.resize();chartIp.update('none');chartPp.update('none');},50);}
+  if(id==='q'&&chartQcr&&chartQdc){setTimeout(()=>{chartQcr.resize();chartQdc.resize();chartQcr.update('none');chartQdc.update('none');},50);}
+  if(id==='o'&&chartOp){setTimeout(()=>{chartOp.resize();chartOp.update('none');},50);}
+}
+
+// FIX #2 — onUnitChange atualiza TODAS as abas
+function onUnitChange(unit){
+  ST.unit=unit;
+  renderEmail();
+  ['sCAS','sSJC','sTodas','sGCR'].forEach(id=>document.getElementById(id).style.display='none');
+  if(unit==='CAS') document.getElementById('sCAS').style.display='block';
+  else if(unit==='SJC') document.getElementById('sSJC').style.display='block';
+  else if(unit==='GCR') document.getElementById('sGCR').style.display='block';
+  else document.getElementById('sTodas').style.display='block';
+  renderQualidade();
+  renderOperacao();
+  renderInteresse(unit==='todas'?'todas':unit);
+}
+
+// FIX #1 — campanha funcional
+function onCampanhaChange(val){ST.campanha=val;renderEmail();}
+
+// FIX #3 #4 #12 — filtro de data: validação + fronteira de mês + atualiza tudo
+function onDateChange(){
+  const inF=document.getElementById('dtFrom'),inT=document.getElementById('dtTo');
+  const fD=parseDate(inF.value),tD=parseDate(inT.value);
+  inF.classList.toggle('err',!fD);
+  inT.classList.toggle('err',!tD);
+  if(!fD||!tD) return;
+  if(fD>tD){inF.classList.add('err');inT.classList.add('err');return;}
+  inF.classList.remove('err');inT.classList.remove('err');
+  ST.from=fD;ST.to=tD;
+  renderEmail();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+mkCharts();
+renderCampOverview();
+renderQualidade();
+renderOperacao();
+renderInteresse('todas');
+['ts','tq','to','ti'].forEach(id=>document.getElementById(id).style.display='none');
+document.getElementById('sTodas').style.display='block';
+['sCAS','sSJC','sGCR'].forEach(id=>document.getElementById(id).style.display='none');
+// Carrega dados reais da planilha se APPS_SCRIPT_URL estiver configurada
+carregarDadosRemoto();
+</script>
+</body>
+</html>
