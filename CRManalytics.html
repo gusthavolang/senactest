@@ -380,14 +380,13 @@ async function carregarDadosRemoto() {
       CAMP.length = 0;
       d.campanhas.forEach(r => CAMP.push({
         key: r.key, nome: r.nome,
-        acoes: +r.acoes, ent: +r.ent,
+        acoes: +r.acoes, ent: +r.ent, disp: +r.disp || +r.ent,
         ab: +r.ab, ctr: +r.ctr, opt: 0,
-        est: !!r.est, rela: !!r.rela
+        est: !!r.est, rela: !!r.rela, unidade: r.unidade || ''
       }));
     }
 
-    // ── 2. Evolução mensal de e-mail (agregada por mês a partir de email_acoes)
-    // Valores absolutos do Apps Script → divide por 1.000 para o gráfico (em milhares)
+    // ── 2. Evolução mensal de e-mail (agregada por mês — todas as unidades)
     if (d.emailMensal?.length) {
       MOS.length = 0; MOD.length = 0;
       const mNomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
@@ -401,6 +400,22 @@ async function carregarDadosRemoto() {
       EM.inv  = d.emailMensal.map(r => Math.round(+r.inv  / 1000));
       EM.ab   = d.emailMensal.map(r => Math.round(+r.ab   / 1000));
       EM.cl   = d.emailMensal.map(r => Math.round(+r.cl   / 1000));
+    }
+
+    // ── 2b. Evolução mensal por unidade (para filtro CAS / SJC / GCR)
+    if (d.emailMensalPorUnidade) {
+      ['GCR','CAS','SJC'].forEach(u => {
+        const arr = d.emailMensalPorUnidade[u];
+        if (!arr?.length) return;
+        // Alinha com MOS global: mês sem movimento = 0
+        EM_U[u] = {
+          disp: MOS.map(mes => { const r=arr.find(x=>x.mes===mes); return r?Math.round(+r.disp/1000):0; }),
+          ent:  MOS.map(mes => { const r=arr.find(x=>x.mes===mes); return r?Math.round(+r.ent /1000):0; }),
+          inv:  MOS.map(mes => { const r=arr.find(x=>x.mes===mes); return r?Math.round(+r.inv /1000):0; }),
+          ab:   MOS.map(mes => { const r=arr.find(x=>x.mes===mes); return r?Math.round(+r.ab  /1000):0; }),
+          cl:   MOS.map(mes => { const r=arr.find(x=>x.mes===mes); return r?Math.round(+r.cl  /1000):0; }),
+        };
+      });
     }
 
     // ── 3. Qualidade da base (estimado — aba manual)
@@ -538,22 +553,34 @@ async function carregarDadosRemoto() {
   }
 }
 
-// Email mensal (milhares) — Jan-Mar real, Abr-Mai estimado
+// Email mensal (milhares) — Jan-Mar real, Abr-Mai estimado — base global (todas as unidades)
 const EM={disp:[1940,1820,5200,2100,1600],ent:[1930,1810,5170,2085,1590],inv:[10,10,30,15,10],ab:[424,380,520,350,260],cl:[20,18,28,17,13]};
+
+// Dados mensais por unidade — populados pelo Apps Script; null = usa EM global como fallback
+const EM_U={GCR:null,CAS:null,SJC:null};
+
+// Retorna os dados mensais para a unidade selecionada
+function getEM(){
+  const u=ST.unit;
+  if(u==='todas'||u==='GCR'||!EM_U[u]) return EM;
+  const eu=EM_U[u];
+  // Se ainda não carregado (arrays vazios), retorna zeros para não misturar com dados GCR
+  return eu.disp.length?eu:{disp:MOS.map(()=>0),ent:MOS.map(()=>0),inv:MOS.map(()=>0),ab:MOS.map(()=>0),cl:MOS.map(()=>0)};
+}
 
 // Campanhas — acoes: real (relatórios 5,6) | ab/ctr: real onde disponível
 const CAMP=[
-  {key:'pos_grad',      nome:'pos_graduacao | Inscrições prorrogadas',               acoes:12,  ent:22681,   ab:85.4,ctr:2.2,opt:0.1},
-  {key:'vestibular',    nome:'vestibular_1_semestre_2026_presencial_GCR',             acoes:7,   ent:25161,   ab:70.1,ctr:1.8,opt:0.2},
-  {key:'processo_sel1', nome:'processo_sel_EAD_2026_1_GCR',                          acoes:28,  ent:235718,  ab:30.6,ctr:0.9,opt:0.4},
-  {key:'processo_sel2', nome:'processo_sel_EAD_2026_2_GCR',                          acoes:47,  ent:180421,  ab:28.3,ctr:0.8,opt:0.4,est:true},
-  {key:'idiomas',       nome:'idiomas_2026_GCR',                                      acoes:5,   ent:302667,  ab:20.3,ctr:1.3,opt:0.6},
-  {key:'cursos_tec',    nome:'rede_ead_cursos_tecnicos_2026_GCR',                    acoes:4,   ent:372693,  ab:21.2,ctr:3.2,opt:0.8},
-  {key:'institucional', nome:'campanha_institucional_2026_GCR',                      acoes:13,  ent:131978,  ab:15.1,ctr:0.6,opt:0.7,est:true},
-  {key:'meu_senac',     nome:'meu_senac_2026_GCR',                                   acoes:7,   ent:92415,   ab:18.5,ctr:0.8,opt:0.3,est:true},
-  {key:'avisos',        nome:'avisos_2026_GCR',                                       acoes:1,   ent:471738,  ab:10.2,ctr:0.3,opt:0.5},
-  {key:'cursos_livres', nome:'cursos_livres_2026_GCR',                                acoes:1,   ent:1185783, ab:5.9, ctr:0.5,opt:1.2},
-  {key:'regua',         nome:'Régua de Relacionamento (EDS + Aniversário + Conclusão)',acoes:204,ent:9563944, ab:14.8,ctr:0.1,opt:0.2,est:true,rela:true},
+  {key:'pos_grad',      nome:'pos_graduacao | Inscrições prorrogadas',               acoes:12,  ent:22681,   ab:85.4,ctr:2.2,opt:0.1,unidade:'GCR'},
+  {key:'vestibular',    nome:'vestibular_1_semestre_2026_presencial_GCR',             acoes:7,   ent:25161,   ab:70.1,ctr:1.8,opt:0.2,unidade:'GCR'},
+  {key:'processo_sel1', nome:'processo_sel_EAD_2026_1_GCR',                          acoes:28,  ent:235718,  ab:30.6,ctr:0.9,opt:0.4,unidade:'GCR'},
+  {key:'processo_sel2', nome:'processo_sel_EAD_2026_2_GCR',                          acoes:47,  ent:180421,  ab:28.3,ctr:0.8,opt:0.4,est:true,unidade:'GCR'},
+  {key:'idiomas',       nome:'idiomas_2026_GCR',                                      acoes:5,   ent:302667,  ab:20.3,ctr:1.3,opt:0.6,unidade:'GCR'},
+  {key:'cursos_tec',    nome:'rede_ead_cursos_tecnicos_2026_GCR',                    acoes:4,   ent:372693,  ab:21.2,ctr:3.2,opt:0.8,unidade:'GCR'},
+  {key:'institucional', nome:'campanha_institucional_2026_GCR',                      acoes:13,  ent:131978,  ab:15.1,ctr:0.6,opt:0.7,est:true,unidade:'GCR'},
+  {key:'meu_senac',     nome:'meu_senac_2026_GCR',                                   acoes:7,   ent:92415,   ab:18.5,ctr:0.8,opt:0.3,est:true,unidade:'GCR'},
+  {key:'avisos',        nome:'avisos_2026_GCR',                                       acoes:1,   ent:471738,  ab:10.2,ctr:0.3,opt:0.5,unidade:'GCR'},
+  {key:'cursos_livres', nome:'cursos_livres_2026_GCR',                                acoes:1,   ent:1185783, ab:5.9, ctr:0.5,opt:1.2,unidade:'GCR'},
+  {key:'regua',         nome:'Régua de Relacionamento (EDS + Aniversário + Conclusão)',acoes:204,ent:9563944, ab:14.8,ctr:0.1,opt:0.2,est:true,rela:true,unidade:'GCR'},
 ];
 
 // Ações por campanha
@@ -839,30 +866,31 @@ function renderOptBars(items){
 
 // ─── RENDER EMAIL ─────────────────────────────────────────────────────────────
 function renderEmail(){
-  const gcr=ST.unit==='todas'||ST.unit==='GCR';
-  document.getElementById('eGCR').style.display=gcr?'block':'none';
-  document.getElementById('eNoData').style.display=gcr?'none':'block';
-  if(!gcr){document.getElementById('eNoDataUnit').textContent=ST.unit;return;}
+  // Mostra conteúdo para todas as unidades
+  document.getElementById('eGCR').style.display='block';
+  document.getElementById('eNoData').style.display='none';
 
-  // FIX #5 — label dinâmico
-  document.getElementById('unidadeLabel').textContent={todas:'Todas as unidades',GCR:'GCR'}[ST.unit];
+  const uLabel={todas:'Todas as unidades',GCR:'GCR',CAS:'CAS',SJC:'SJC'};
+  document.getElementById('unidadeLabel').textContent=uLabel[ST.unit]||ST.unit;
   document.getElementById('periodoLabel').textContent=
     document.getElementById('dtFrom').value+' – '+document.getElementById('dtTo').value;
 
+  const em=getEM(); // dados da unidade selecionada
   const idx=getMesIdx();
   if(idx.length===0) return;
-  const td=idx.reduce((s,i)=>s+EM.disp[i],0)*1000;
-  const te=idx.reduce((s,i)=>s+EM.ent[i],0)*1000;
-  const ti=idx.reduce((s,i)=>s+EM.inv[i],0)*1000;
-  const ta=idx.reduce((s,i)=>s+EM.ab[i],0)*1000;
-  const tc=idx.reduce((s,i)=>s+EM.cl[i],0)*1000;
+
+  const safe=(arr,i)=>(arr&&arr[i]!=null?arr[i]:0);
+  const td=idx.reduce((s,i)=>s+safe(em.disp,i),0)*1000;
+  const te=idx.reduce((s,i)=>s+safe(em.ent,i),0)*1000;
+  const ti=idx.reduce((s,i)=>s+safe(em.inv,i),0)*1000;
+  const ta=idx.reduce((s,i)=>s+safe(em.ab,i),0)*1000;
+  const tc=idx.reduce((s,i)=>s+safe(em.cl,i),0)*1000;
 
   document.getElementById('eDisp').textContent=fmtN(td);
   document.getElementById('eEnt').textContent=fmtN(te);
   document.getElementById('eInv').textContent=fmtN(ti);
   document.getElementById('eAb').textContent=fmtN(ta);
   document.getElementById('eCl').textContent=fmtN(tc);
-  // FIX #7 — subtítulo de % inválidos atualiza com filtro
   document.getElementById('eInvSub').textContent='Hard bounce · '+(td>0?(ti/td*100).toFixed(1):'0')+'%';
   if(te>0){
     document.getElementById('eTxEnt').textContent=(te/td*100).toFixed(1)+'%';
@@ -873,25 +901,25 @@ function renderEmail(){
   // Gráfico 1: Disparados + Entregues
   if(chartEl){
     chartEl.data.labels=idx.map(i=>MOS[i]);
-    [EM.disp,EM.ent].forEach((arr,di)=>{chartEl.data.datasets[di].data=idx.map(i=>arr[i]);});
+    [em.disp,em.ent].forEach((arr,di)=>{chartEl.data.datasets[di].data=idx.map(i=>safe(arr,i));});
     chartEl.update();
   }
   // Gráfico 2: Inválidos + Aberturas + Cliques
   if(chartEl2){
     chartEl2.data.labels=idx.map(i=>MOS[i]);
-    [EM.inv,EM.ab,EM.cl].forEach((arr,di)=>{chartEl2.data.datasets[di].data=idx.map(i=>arr[i]);});
+    [em.inv,em.ab,em.cl].forEach((arr,di)=>{chartEl2.data.datasets[di].data=idx.map(i=>safe(arr,i));});
     chartEl2.update();
   }
 
-  // FIX #1 — campanha funcional
   ST.campanha?renderCampDetail(ST.campanha):renderCampOverview();
 }
 
 function renderCampOverview(){
   document.getElementById('campBanner').style.display='none';
   document.getElementById('eTabTitle').textContent='Performance por campanha';
-  const comerciais=CAMP.filter(c=>!c.rela);
-  const regua=CAMP.find(c=>c.rela);
+  const byUnit=c=>ST.unit==='todas'||!c.unidade||c.unidade===ST.unit;
+  const comerciais=CAMP.filter(c=>!c.rela&&byUnit(c));
+  const regua=CAMP.find(c=>c.rela&&byUnit(c));
   const rows=comerciais.map(c=>`
     <tr>
       <td style="font-size:10px">${c.nome}${c.est?' <sup style="color:#7C6EDB">¹</sup>':''}</td>
@@ -899,6 +927,7 @@ function renderCampOverview(){
       <td class="nr">${fmtN(c.ent)}</td>
       <td class="rr">${abBadge(c.ab)}</td>
       <td class="rr">${ctrBadge(c.ctr)}</td>
+      <td><button onclick="document.getElementById('campSel').value='${c.key}';onCampanhaChange('${c.key}')" style="font-size:9px;background:#EEF9FC;border:0.5px solid #2BB5C8;color:#0E6E88;border-radius:4px;padding:2px 7px;cursor:pointer">▶ Ver ações</button></td>
     </tr>`).join('');
   const rRow=regua?`<tr class="rela-row">
     <td style="font-size:10px">${regua.nome} <sup style="color:#7C6EDB">¹</sup></td>
@@ -906,13 +935,18 @@ function renderCampOverview(){
     <td class="nr">${fmtN(regua.ent)}</td>
     <td class="rr">${abBadge(regua.ab)}</td>
     <td class="rr">${ctrBadge(regua.ctr)}</td>
+    <td><button onclick="document.getElementById('campSel').value='${regua.key}';onCampanhaChange('${regua.key}')" style="font-size:9px;background:#FFFBEB;border:0.5px solid #F5C842;color:#92400E;border-radius:4px;padding:2px 7px;cursor:pointer">▶ Ver ações</button></td>
   </tr>`:'' ;
-  const tot=CAMP.reduce((s,c)=>s+c.ent,0);
+  if(!comerciais.length&&!regua){
+    document.getElementById('eTabBody').innerHTML='<div class="no-data" style="padding:24px">Carregando campanhas da planilha… Verifique se os dados de <strong>'+ST.unit+'</strong> estão na aba <em>email_acoes</em>.</div>';
+    renderOptBars([]);return;
+  }
+  const tot=comerciais.reduce((s,c)=>s+c.ent,0)+(regua?regua.ent:0);
   document.getElementById('eTabBody').innerHTML=`
     <table>
-      <thead><tr><th>Campanha</th><th style="text-align:center">Ações</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th></tr></thead>
+      <thead><tr><th>Campanha</th><th style="text-align:center">Ações</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th><th>Detalhe</th></tr></thead>
       <tbody>${rows}${rRow}</tbody>
-      <tfoot class="tfoot"><tr><td colspan="2"><strong>Total geral</strong></td><td class="nr"><strong>${fmtN(tot)}</strong></td><td></td><td></td></tr></tfoot>
+      <tfoot class="tfoot"><tr><td colspan="2"><strong>Total geral</strong></td><td class="nr"><strong>${fmtN(tot)}</strong></td><td></td><td></td><td></td></tr></tfoot>
     </table>
     <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Estimado. Régua = envios diários automatizados (EDS início de curso, Aniversário de Vida, Conclusão de Curso). Clique em uma campanha no filtro para ver o detalhamento por ação.</div>`;
   renderOptBars([...comerciais].sort((a,b)=>b.opt-a.opt));
@@ -923,23 +957,56 @@ function renderCampDetail(key){
   if(!c){renderCampOverview();return;}
   document.getElementById('campBanner').style.display='flex';
   document.getElementById('campBannerNome').textContent='📧 '+c.nome;
-  document.getElementById('eTabTitle').textContent='Ações da campanha · '+c.acoes+' ações';
   const d=DETAIL[key];
-  if(!d){document.getElementById('eTabBody').innerHTML='<div style="font-size:11px;color:#9CA3AF;padding:16px;text-align:center">Detalhamento por ação disponível após integração com CRM</div>';return;}
+  if(!d){
+    document.getElementById('eTabTitle').textContent='Ações da campanha · '+c.acoes+' ações';
+    document.getElementById('eTabBody').innerHTML='<div style="font-size:11px;color:#9CA3AF;padding:16px;text-align:center">Selecione a campanha no filtro e recarregue os dados da planilha para ver o detalhamento por ação.</div>';
+    renderOptBars([c]); return;
+  }
+
+  const LIMIT=50;
+  const total=d.acoes.length;
+  // Ordena por data desc (mais recente primeiro); se sem data, mantém ordem original
+  const ordenadas=[...d.acoes].sort((a,b)=>{
+    if(!a.data&&!b.data) return 0;
+    if(!a.data) return 1; if(!b.data) return -1;
+    return b.data.localeCompare(a.data);
+  });
+  const exibidas=ordenadas.slice(0,LIMIT);
+
+  // KPIs rápidos da campanha
+  const totalDisp=d.acoes.reduce((s,a)=>s+(a.disp!=null?+a.disp:+a.ent),0);
+  const totalEnt=d.acoes.reduce((s,a)=>s+(+a.ent),0);
+  const totalAb=d.acoes.reduce((s,a)=>s+(+a.ent*(+a.ab/100)),0);
+  const totalCl=d.acoes.reduce((s,a)=>s+(+a.ent*(+a.ctr/100)),0);
+  const abMedia=totalEnt>0?(totalAb/totalEnt*100).toFixed(1):0;
+  const ctrMedia=totalEnt>0?(totalCl/totalEnt*100).toFixed(2):0;
+
+  document.getElementById('eTabTitle').textContent='Ações da campanha · '+total+' ações';
+
+  const notaLimite=total>LIMIT
+    ?`<div class="ftnt" style="margin-top:6px">Exibindo ${LIMIT} de ${total} ações · ordenadas por data de envio (mais recentes primeiro)</div>`:'';
+
   document.getElementById('eTabBody').innerHTML=`
+    <div class="kg k4" style="margin-bottom:9px">
+      <div class="kc"><div class="kl">Disparados total</div><div class="kv">${fmtN(totalDisp)}</div></div>
+      <div class="kc"><div class="kl">Entregues total</div><div class="kv" style="color:#F47920">${fmtN(totalEnt)}</div></div>
+      <div class="kc"><div class="kl">Abertura média</div><div class="kv" style="color:#2BB5C8">${abMedia}%</div></div>
+      <div class="kc"><div class="kl">CTR médio</div><div class="kv" style="color:#F5C842">${ctrMedia}%</div></div>
+    </div>
     <table>
-      <thead><tr><th>Ação</th><th class="nr">Disparados</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th><th>Obs.</th></tr></thead>
-      <tbody>${d.acoes.map(a=>`
+      <thead><tr><th>Ação</th><th style="white-space:nowrap">Data envio</th><th class="nr">Disparados</th><th class="nr">Entregues</th><th class="rr">Abertura</th><th class="rr">CTR</th></tr></thead>
+      <tbody>${exibidas.map(a=>`
         <tr>
-          <td style="font-size:9px">${a.nome}</td>
+          <td style="font-size:9px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.nome}">${a.nome}</td>
+          <td style="font-size:9px;white-space:nowrap;color:#6B7280">${a.data||'—'}</td>
           <td class="nr">${fmtN(a.disp!=null?+a.disp:+a.ent)}</td>
           <td class="nr">${fmtN(+a.ent)}</td>
           <td class="rr">${abBadge(+a.ab)}</td>
           <td class="rr">${ctrBadge(+a.ctr)}</td>
-          <td style="font-size:9px;color:#6B7280">${a.obs||''}</td>
         </tr>`).join('')}
       </tbody>
-    </table>`;
+    </table>${notaLimite}`;
   renderOptBars([c]);
 }
 
@@ -1022,6 +1089,8 @@ function sw(id,btn){
 // FIX #2 — onUnitChange atualiza TODAS as abas
 function onUnitChange(unit){
   ST.unit=unit;
+  ST.campanha='';
+  populateCampSel();
   renderEmail();
   ['sCAS','sSJC','sTodas','sGCR'].forEach(id=>document.getElementById(id).style.display='none');
   if(unit==='CAS') document.getElementById('sCAS').style.display='block';
@@ -1055,9 +1124,11 @@ function onDateChange(){
 function populateCampSel(){
   const sel=document.getElementById('campSel');
   const cur=sel.value;
+  const filtradas=CAMP.filter(c=>!c.rela&&(ST.unit==='todas'||!c.unidade||c.unidade===ST.unit));
   sel.innerHTML='<option value="">Todas as campanhas</option>'+
-    CAMP.filter(c=>!c.rela).map(c=>`<option value="${c.key}">${c.nome}</option>`).join('');
+    filtradas.map(c=>`<option value="${c.key}">${c.nome}</option>`).join('');
   if(cur&&[...sel.options].some(o=>o.value===cur)) sel.value=cur;
+  else{sel.value='';ST.campanha='';}
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
