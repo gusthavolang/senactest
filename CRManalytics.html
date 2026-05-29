@@ -336,10 +336,23 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
           <div class="leg" id="legPeriodo"></div>
         </div>
       </div>
-      <div class="row1 pn">
+      <!-- Tabela 1: cursos da unidade selecionada (oculta quando "todas") -->
+      <div class="row1 pn" id="tiPanelUnid" style="display:none">
         <div class="pt" id="tabelaTitle">Top cursos por interesse</div>
         <table><thead><tr><th class="s">Curso</th><th class="s">Nível</th><th class="s">Sub-área</th><th class="nr s">Interessados</th></tr></thead>
         <tbody id="tabelaBody"></tbody></table>
+      </div>
+      <!-- Tabela 2: sempre todas as unidades -->
+      <div class="row1 pn">
+        <div class="pt">Top cursos por interesse — Todas as unidades</div>
+        <table><thead><tr><th class="s">Curso</th><th class="s">Nível</th><th class="s">Sub-área</th><th class="nr s">Interessados</th></tr></thead>
+        <tbody id="tabelaBodyTodas"></tbody></table>
+      </div>
+      <!-- Tabela 3: agrupado por subárea -->
+      <div class="row1 pn">
+        <div class="pt" id="subareaTitle">Interesse por subárea</div>
+        <table><thead><tr><th class="s">Sub-área</th><th class="nr s">Interessados</th><th class="nr s">Cursos</th></tr></thead>
+        <tbody id="tabelaBodySubarea"></tbody></table>
       </div>
     </div>
 
@@ -497,6 +510,7 @@ async function carregarDadosRemoto() {
 
     // ── 7. Top cursos (linha = curso do Relatório 9/10; filtrado por unidade no cliente)
     if (d.interessecursos?.length) {
+      CURSOS_RAW.splice(0, CURSOS_RAW.length, ...d.interessecursos);
       unidsI.forEach(u => {
         if (!iData[u]) iData[u] = {};
         const filtrado = d.interessecursos
@@ -1069,21 +1083,79 @@ function renderOperacao(){
 }
 
 // ─── RENDER INTERESSE ─────────────────────────────────────────────────────────
+// Lista completa de cursos vinda do Apps Script (para agrupamento por subárea)
+const CURSOS_RAW=[];
+function parsePtBR(s){return parseInt(String(s||0).replace(/\./g,'').replace(',','.'))||0;}
+
+function renderSubarea(unit){
+  const isUnit=unit!=='todas'&&unit!=='GCR';
+  let fonte;
+  if(CURSOS_RAW.length){
+    // Dados reais do Apps Script: cada linha tem {unidade, subarea, total_interessados, ...}
+    fonte=isUnit?CURSOS_RAW.filter(r=>r.unidade===unit):CURSOS_RAW;
+  } else {
+    // Fallback estático: usa top-10 de iData (c[3]=subárea, c[4]=total_str)
+    const d=iData[unit]||iData.todas;
+    fonte=d.cursos.map(c=>({subarea:c[3],total_interessados:parsePtBR(c[4])}));
+  }
+  const map={};
+  fonte.forEach(r=>{
+    const sa=r.subarea||'—';
+    const tot=+r.total_interessados||0;
+    if(!map[sa]) map[sa]={subarea:sa,total:0,qtd:0};
+    map[sa].total+=tot;
+    map[sa].qtd++;
+  });
+  const rows=Object.values(map).sort((a,b)=>b.total-a.total);
+  document.getElementById('subareaTitle').textContent=
+    isUnit?`Interesse por subárea — ${unit}`:'Interesse por subárea — Todas as unidades';
+  document.getElementById('tabelaBodySubarea').innerHTML=rows.map(r=>`
+    <tr>
+      <td style="font-size:10px">${r.subarea}</td>
+      <td class="nr" style="font-weight:500">${r.total.toLocaleString('pt-BR')}</td>
+      <td class="nr" style="color:#9CA3AF;font-size:9px">${r.qtd} curso${r.qtd!==1?'s':''}</td>
+    </tr>`).join('');
+}
+
 function renderInteresse(unit){
+  const isUnit=unit!=='todas'&&unit!=='GCR';
   const d=iData[unit]||iData.todas;
-  document.getElementById('tabelaTitle').textContent=d.title;
-  document.getElementById('tabelaBody').innerHTML=d.cursos.map(c=>`
+  const dTodas=iData.todas;
+
+  // Tabela 1: cursos da unidade (aparece antes, só quando unidade específica)
+  const panel1=document.getElementById('tiPanelUnid');
+  if(isUnit){
+    panel1.style.display='block';
+    document.getElementById('tabelaTitle').textContent=d.title;
+    document.getElementById('tabelaBody').innerHTML=d.cursos.map(c=>`
+      <tr>
+        <td style="font-size:10px">${c[0]}</td>
+        <td><span class="badge ${c[2]}">${c[1]}</span></td>
+        <td style="font-size:9px;color:#6B7280;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c[3]}">${c[3]}</td>
+        <td class="nr">${c[4]}</td>
+      </tr>`).join('');
+  } else {
+    panel1.style.display='none';
+  }
+
+  // Tabela 2: sempre todas as unidades
+  document.getElementById('tabelaBodyTodas').innerHTML=dTodas.cursos.map(c=>`
     <tr>
       <td style="font-size:10px">${c[0]}</td>
       <td><span class="badge ${c[2]}">${c[1]}</span></td>
       <td style="font-size:9px;color:#6B7280;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c[3]}">${c[3]}</td>
-      <td class="nr" style="${c[4]==='1.640'?'font-weight:600;color:#F47920':''}">${c[4]}</td>
+      <td class="nr">${c[4]}</td>
     </tr>`).join('');
+
+  // Doughnuts
   if(chartIp){chartIp.destroy();chartPp.destroy();}
   chartIp=new Chart(document.getElementById('cIp'),{type:'doughnut',data:{labels:d.nL,datasets:[{data:d.nD,backgroundColor:d.nC,borderWidth:2,borderColor:'white'}]},options:{...base,cutout:'55%'}});
   chartPp=new Chart(document.getElementById('cPp'),{type:'doughnut',data:{labels:d.pL,datasets:[{data:d.pD,backgroundColor:d.pC,borderWidth:2,borderColor:'white'}]},options:{...base,cutout:'55%'}});
   document.getElementById('legNivel').innerHTML=d.nL.map((l,i)=>`<div class="li"><span class="ld" style="background:${d.nC[i]}"></span>${l} ${d.nD[i]}%</div>`).join('');
   document.getElementById('legPeriodo').innerHTML=d.pL.map((l,i)=>`<div class="li"><span class="ld" style="background:${d.pC[i]}"></span>${l} ${d.pD[i]}%</div>`).join('');
+
+  // Tabela 3: subárea
+  renderSubarea(unit);
 }
 
 // ─── HANDLERS ─────────────────────────────────────────────────────────────────
