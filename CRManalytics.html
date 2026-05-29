@@ -11,6 +11,9 @@
 .fl{font-size:10px;color:rgba(255,255,255,0.55)}
 .fs{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;font-family:inherit}
 .fs::placeholder{color:rgba(255,255,255,0.4)}
+/* Windows: select ignora rgba — força fundo sólido para texto branco aparecer */
+select.fs{background-color:#2a3f6d;color:#fff}
+select.fs option{background-color:#fff;color:#1B2E5A}
 .fs.err{border-color:#E05050!important}
 .date-wrap{display:flex;align-items:center;gap:5px}
 .date-sep{color:rgba(255,255,255,0.4);font-size:10px}
