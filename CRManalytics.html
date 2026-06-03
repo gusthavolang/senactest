@@ -135,11 +135,50 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
           <button class="cb-back" onclick="voltarGeral()">← Voltar para visão geral</button>
         </div>
         <div class="kg k5">
-          <div class="kc"><div class="kl">Total disparados</div><div class="kv lg" id="eDisp">12.660.000</div><div class="ks">Base de disparo</div></div>
-          <div class="kc"><div class="kl">E-mails entregues</div><div class="kv lg" style="color:#F47920" id="eEnt">12.585.000</div><div class="ks">Disparados − bounces</div></div>
-          <div class="kc"><div class="kl">E-mails inválidos</div><div class="kv lg" style="color:#E05050" id="eInv">75.000</div><div class="ks" id="eInvSub">Hard bounce · 0,6%</div></div>
-          <div class="kc"><div class="kl">Aberturas únicas</div><div class="kv lg" style="color:#2BB5C8" id="eAb">1.934.000</div><div class="ks">1ª abertura/destinatário</div></div>
-          <div class="kc"><div class="kl">Cliques únicos</div><div class="kv lg" style="color:#F5C842" id="eCl">96.000</div><div class="ks">1º clique/destinatário</div></div>
+          <div class="kc">
+            <div class="kl">Total disparados</div>
+            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+              <div class="kv lg" id="eDisp">12.660.000</div>
+            </div>
+            <div class="ks">Base de disparo</div>
+            <span class="trend" id="eDispTrend"></span>
+          </div>
+          <div class="kc">
+            <div class="kl">E-mails entregues</div>
+            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+              <div class="kv lg" style="color:#F47920" id="eEnt">12.585.000</div>
+              <span id="eEntPct" style="font-size:11px;color:#F47920;font-weight:600"></span>
+            </div>
+            <div class="ks">Disparados − bounces</div>
+            <span class="trend" id="eEntTrend"></span>
+          </div>
+          <div class="kc">
+            <div class="kl">E-mails inválidos</div>
+            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+              <div class="kv lg" style="color:#E05050" id="eInv">75.000</div>
+              <span id="eInvPct" style="font-size:11px;color:#E05050;font-weight:600"></span>
+            </div>
+            <div class="ks" id="eInvSub">Hard bounce</div>
+            <span class="trend" id="eInvTrend"></span>
+          </div>
+          <div class="kc">
+            <div class="kl">Aberturas únicas</div>
+            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+              <div class="kv lg" style="color:#2BB5C8" id="eAb">1.934.000</div>
+              <span id="eAbPct" style="font-size:11px;color:#2BB5C8;font-weight:600"></span>
+            </div>
+            <div class="ks">1ª abertura/destinatário</div>
+            <span class="trend" id="eAbTrend"></span>
+          </div>
+          <div class="kc">
+            <div class="kl">Cliques únicos</div>
+            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+              <div class="kv lg" style="color:#F5C842" id="eCl">96.000</div>
+              <span id="eClPct" style="font-size:11px;color:#F5C842;font-weight:600"></span>
+            </div>
+            <div class="ks">1º clique/destinatário</div>
+            <span class="trend" id="eClTrend"></span>
+          </div>
         </div>
         <div class="rg k3" style="margin-bottom:12px">
           <div class="rc"><div class="rl">Taxa de entrega</div><div class="rv" id="eTxEnt">99,4%</div><div class="rd2">Entregues / Disparados</div></div>
@@ -148,7 +187,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
         </div>
         <div class="row2" style="margin-bottom:9px">
           <div class="pn">
-            <div class="pt">Volume mensal — Disparados e Entregues (mil)</div>
+            <div class="pt" id="eChart1Title">Volume mensal — Disparados e Entregues (mil)</div>
             <div style="position:relative;width:100%;height:155px"><canvas id="cEl"></canvas></div>
             <div class="leg">
               <div class="li"><span class="ld" style="background:#1B2E5A"></span>Disparados</div>
@@ -156,7 +195,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
             </div>
           </div>
           <div class="pn">
-            <div class="pt">Engajamento mensal — Inválidos, Aberturas e Cliques (mil)</div>
+            <div class="pt" id="eChart2Title">Engajamento mensal — Inválidos, Aberturas e Cliques (mil)</div>
             <div style="position:relative;width:100%;height:155px"><canvas id="cEl2"></canvas></div>
             <div class="leg">
               <div class="li"><span class="ld" style="background:#E05050"></span>Inválidos</div>
@@ -181,6 +220,22 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
             <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Campo opt-out não disponível nos relatórios do CRM. Valores <strong>estimados</strong>. Pendência GTI.</div>
           </div>
         </div>
+        <div class="sec-hdr" style="margin-top:12px">Segmentações (Listas de Disparo) <span style="font-size:9px;color:#9CA3AF;font-weight:400;margin-left:6px">¹ estimado</span></div>
+        <div class="row1 pn">
+          <div class="pt">Qualidade por segmentação</div>
+          <table>
+            <thead><tr><th class="s">Segmentação</th><th class="nr s">Total</th><th class="nr s">Válidos</th><th class="nr s">E-mails inv.</th><th class="nr s">Opt-outs <sup style="color:#7C6EDB">¹</sup></th><th class="rr s">Qualidade</th></tr></thead>
+            <tbody>
+              <tr><td><span class="seg-pill">cursos_livres — ex-alunos + interesses + ocorrências</span></td><td class="nr">1.185.783</td><td class="nr">1.184.574</td><td class="nr" style="color:#E05050">1.209</td><td class="nr" style="color:#7C6EDB">~14.200</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
+              <tr><td><span class="seg-pill">idiomas — alunos + ex-alunos + interesses</span></td><td class="nr">378.247</td><td class="nr">376.580</td><td class="nr" style="color:#E05050">1.667</td><td class="nr" style="color:#7C6EDB">~2.270</td><td class="rr"><span class="badge ok">99,6%</span></td></tr>
+              <tr><td><span class="seg-pill">processo_seletivo_EAD — descontos bacharelado</span></td><td class="nr">235.893</td><td class="nr">235.718</td><td class="nr" style="color:#E05050">175</td><td class="nr" style="color:#7C6EDB">~940</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
+              <tr><td><span class="seg-pill">meu_senac — alunos cursando + responsáveis</span></td><td class="nr">92.929</td><td class="nr">92.415</td><td class="nr" style="color:#E05050">514</td><td class="nr" style="color:#7C6EDB">~280</td><td class="rr"><span class="badge ok">99,4%</span></td></tr>
+              <tr><td><span class="seg-pill">pos_graduacao — inscrições prorrogadas</span></td><td class="nr">22.681</td><td class="nr">22.681</td><td class="nr" style="color:#E05050">0</td><td class="nr" style="color:#7C6EDB">~23</td><td class="rr"><span class="badge ok">100%</span></td></tr>
+              <tr class="tfoot"><td><strong>Total (amostra)</strong></td><td class="nr"><strong>1.915.533</strong></td><td class="nr"><strong>1.911.968</strong></td><td class="nr" style="color:#E05050"><strong>3.565</strong></td><td class="nr" style="color:#7C6EDB"><strong>~17.713</strong></td><td class="rr"><span class="badge ok">99,8%</span></td></tr>
+            </tbody>
+          </table>
+          <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Valores de opt-out estimados. Campo não disponível nos relatórios do CRM. Pendência GTI.</div>
+        </div>
       </div>
       <div id="eNoData" style="display:none">
         <div class="no-data">
@@ -193,10 +248,6 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
 
     <!-- SMS -->
     <div id="ts" style="display:none">
-      <div class="row1 pn" style="margin-bottom:9px">
-        <div class="pt" id="sChartTitle">SMS enviados por campanha — período selecionado</div>
-        <div style="position:relative;width:100%;height:190px"><canvas id="cSms"></canvas></div>
-      </div>
       <div id="sGCR" style="display:none">
         <div class="no-data"><span style="font-size:28px;display:block;margin-bottom:8px">📱</span>
           <div style="font-weight:500;color:#374151;margin-bottom:6px">SMS operacional — gerenciado pelas unidades</div>
@@ -206,67 +257,113 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
       <div id="sCAS" style="display:none">
         <div class="kg k4">
           <div class="kc"><div class="kl">SMS enviados · CAS</div><div class="kv lg">4.795</div><div class="ks">Jan–Mar 2026 · 37 ações</div></div>
-          <div class="kc"><div class="kl">SMS entregues</div><div class="kv lg" style="color:#F47920">4.795</div><div class="ks">100% entregues</div></div>
-          <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#5DBE8A">0</div><div class="ks">Sem falhas registradas</div></div>
+          <div class="kc">
+            <div class="kl">SMS entregues</div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <div class="kv lg" style="color:#F47920">4.795</div>
+              <span style="font-size:11px;color:#F47920;font-weight:600">100%</span>
+            </div>
+            <div class="ks">do total enviado</div>
+          </div>
+          <div class="kc">
+            <div class="kl">Números inválidos</div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <div class="kv lg" style="color:#5DBE8A">0</div>
+              <span style="font-size:11px;color:#5DBE8A;font-weight:600">0%</span>
+            </div>
+            <div class="ks">do total enviado</div>
+          </div>
           <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#5DBE8A">0,0%</div><div class="ks">Inválidos / Enviados</div></div>
         </div>
         <div class="row1 pn">
-          <div class="pt">Performance por campanha — SMS CAS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th class="s">Campanha</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th><th class="s">Tipo</th></tr></thead>
+          <div class="pt">Performance por ação — SMS CAS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
+          <table><thead><tr><th class="s">Campanha</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th><th class="s">Tipo</th></tr></thead>
           <tbody>
-            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada_2026</td><td class="nr">1.358</td><td class="nr">1.358</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocações</td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD</td><td class="nr">1.239</td><td class="nr">1.239</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Boletos + matrículas</td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD</td><td class="nr">1.107</td><td class="nr">1.107</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
-            <tr><td style="font-size:10px">vestibular_1_semestre_2026_presencial</td><td class="nr">616</td><td class="nr">616</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Aprovados não matr.</td></tr>
-            <tr><td style="font-size:10px">graduacao_1_semestre_2026_EAD</td><td class="nr">418</td><td class="nr">418</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocados</td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_1_semestre_presencial</td><td class="nr">57</td><td class="nr">57</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
-            <tr class="tfoot"><td><strong>Total CAS</strong></td><td class="nr"><strong>4.795</strong></td><td class="nr"><strong>4.795</strong></td><td class="nr"><strong>0</strong></td><td class="rr"><span class="badge ok">0,0%</span></td><td></td></tr>
+            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada_2026</td><td class="nr">1.358</td><td class="nr">1.358</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocações</td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD</td><td class="nr">1.239</td><td class="nr">1.239</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Boletos + matrículas</td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD</td><td class="nr">1.107</td><td class="nr">1.107</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
+            <tr><td style="font-size:10px">vestibular_1_semestre_2026_presencial</td><td class="nr">616</td><td class="nr">616</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Aprovados não matr.</td></tr>
+            <tr><td style="font-size:10px">graduacao_1_semestre_2026_EAD</td><td class="nr">418</td><td class="nr">418</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocados</td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_1_semestre_presencial</td><td class="nr">57</td><td class="nr">57</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
+            <tr class="tfoot"><td><strong>Total CAS</strong></td><td class="nr"><strong>4.795</strong></td><td class="nr"><strong>4.795</strong></td><td class="rr"><span class="badge ok">100%</span></td><td class="nr"><strong>0</strong></td><td class="rr"><span class="badge ok">0,0%</span></td><td></td></tr>
           </tbody></table>
         </div>
       </div>
       <div id="sSJC" style="display:none">
         <div class="kg k4">
           <div class="kc"><div class="kl">SMS enviados · SJC</div><div class="kv lg">266</div><div class="ks">Jan–Mar 2026 · 13 ações</div></div>
-          <div class="kc"><div class="kl">SMS entregues</div><div class="kv lg" style="color:#F47920">255</div><div class="ks">Enviados − inválidos</div></div>
-          <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050">11</div><div class="ks">1 ação com falha</div></div>
+          <div class="kc">
+            <div class="kl">SMS entregues</div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <div class="kv lg" style="color:#F47920">255</div>
+              <span style="font-size:11px;color:#F47920;font-weight:600">95,9%</span>
+            </div>
+            <div class="ks">do total enviado</div>
+          </div>
+          <div class="kc">
+            <div class="kl">Números inválidos</div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <div class="kv lg" style="color:#E05050">11</div>
+              <span style="font-size:11px;color:#E05050;font-weight:600">4,1%</span>
+            </div>
+            <div class="ks">do total enviado</div>
+          </div>
           <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#E05050">4,1%</div><div class="ks">Inválidos / Enviados</div></div>
         </div>
         <div class="row1 pn">
           <div class="pt">Performance por ação — SMS SJC <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th class="s">Curso / Turma</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
+          <table><thead><tr><th class="s">Curso / Turma</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
           <tbody>
-            <tr><td style="font-size:10px">Qualidade e Eficiência na Coleta de Sangue</td><td class="nr">35</td><td class="nr">35</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Administração Geral (3 ações)</td><td class="nr">75</td><td class="nr">75</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Técnico em Farmácia</td><td class="nr">30</td><td class="nr">30</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Língua Brasileira de Sinais</td><td class="nr">23</td><td class="nr">23</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Higiene na Manipulação de Alimentos</td><td class="nr">7</td><td class="nr">7</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Técnicas de Manicure <em style="color:#E05050">(falha no número)</em></td><td class="nr">18</td><td class="nr" style="color:#E05050">7</td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge bad">61,1%</span></td></tr>
-            <tr><td style="font-size:10px">Demais ações (5 avisos)</td><td class="nr">78</td><td class="nr">78</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr class="tfoot"><td><strong>Total SJC</strong></td><td class="nr"><strong>266</strong></td><td class="nr"><strong>255</strong></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
+            <tr><td style="font-size:10px">Qualidade e Eficiência na Coleta de Sangue</td><td class="nr">35</td><td class="nr">35</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Administração Geral (3 ações)</td><td class="nr">75</td><td class="nr">75</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Técnico em Farmácia</td><td class="nr">30</td><td class="nr">30</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Língua Brasileira de Sinais</td><td class="nr">23</td><td class="nr">23</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Higiene na Manipulação de Alimentos</td><td class="nr">7</td><td class="nr">7</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">Técnicas de Manicure <em style="color:#E05050">(falha no número)</em></td><td class="nr">18</td><td class="nr" style="color:#E05050">7</td><td class="rr"><span class="badge bad">38,9%</span></td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge bad">61,1%</span></td></tr>
+            <tr><td style="font-size:10px">Demais ações (5 avisos)</td><td class="nr">78</td><td class="nr">78</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr class="tfoot"><td><strong>Total SJC</strong></td><td class="nr"><strong>266</strong></td><td class="nr"><strong>255</strong></td><td class="rr"><span class="badge warn">95,9%</span></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
           </tbody></table>
         </div>
       </div>
       <div id="sTodas">
         <div class="kg k4">
           <div class="kc"><div class="kl">SMS enviados · Total</div><div class="kv lg">5.061</div><div class="ks">Jan–Mar 2026 · CAS + SJC</div></div>
-          <div class="kc"><div class="kl">SMS entregues</div><div class="kv lg" style="color:#F47920">5.050</div><div class="ks">99,8% entregues</div></div>
-          <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050">11</div><div class="ks">SJC · 0,2% do total</div></div>
+          <div class="kc">
+            <div class="kl">SMS entregues</div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <div class="kv lg" style="color:#F47920">5.050</div>
+              <span style="font-size:11px;color:#F47920;font-weight:600">99,8%</span>
+            </div>
+            <div class="ks">do total enviado</div>
+          </div>
+          <div class="kc">
+            <div class="kl">Números inválidos</div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <div class="kv lg" style="color:#E05050">11</div>
+              <span style="font-size:11px;color:#E05050;font-weight:600">0,2%</span>
+            </div>
+            <div class="ks">do total enviado</div>
+          </div>
           <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#F5C842">0,2%</div><div class="ks">Inválidos / Enviados</div></div>
         </div>
         <div class="row1 pn">
           <div class="pt">Performance consolidada — SMS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th class="s">Campanha / Unidade</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
+          <table><thead><tr><th class="s">Campanha / Unidade</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
           <tbody>
-            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada · <strong>CAS</strong></td><td class="nr">1.358</td><td class="nr">1.358</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.239</td><td class="nr">1.239</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.107</td><td class="nr">1.107</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">vestibular_1_semestre_presencial · <strong>CAS</strong></td><td class="nr">616</td><td class="nr">616</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">graduacao_EAD + outros · <strong>CAS</strong></td><td class="nr">475</td><td class="nr">475</td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">avisos_2026 — 13 ações · <strong>SJC</strong></td><td class="nr">266</td><td class="nr">255</td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
-            <tr class="tfoot"><td><strong>Total geral</strong></td><td class="nr"><strong>5.061</strong></td><td class="nr"><strong>5.050</strong></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge ok">0,2%</span></td></tr>
+            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada · <strong>CAS</strong></td><td class="nr">1.358</td><td class="nr">1.358</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.239</td><td class="nr">1.239</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.107</td><td class="nr">1.107</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">vestibular_1_semestre_presencial · <strong>CAS</strong></td><td class="nr">616</td><td class="nr">616</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">graduacao_EAD + outros · <strong>CAS</strong></td><td class="nr">475</td><td class="nr">475</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
+            <tr><td style="font-size:10px">avisos_2026 — 13 ações · <strong>SJC</strong></td><td class="nr">266</td><td class="nr">255</td><td class="rr"><span class="badge warn">95,9%</span></td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
+            <tr class="tfoot"><td><strong>Total geral</strong></td><td class="nr"><strong>5.061</strong></td><td class="nr"><strong>5.050</strong></td><td class="rr"><span class="badge ok">99,8%</span></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge ok">0,2%</span></td></tr>
           </tbody></table>
           <div class="ftnt">SMS são comunicações operacionais (avisos de turma, convocações, acompanhamento de matrículas).</div>
         </div>
+      </div>
+      <div class="row1 pn" style="margin-top:9px">
+        <div class="pt" id="sChartTitle">SMS por campanha — período selecionado</div>
+        <div style="position:relative;width:100%;height:190px"><canvas id="cSms"></canvas></div>
       </div>
     </div>
 
@@ -279,33 +376,10 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
         <div class="kc"><div class="kl">E-mails inválidos</div><div class="kv lg" style="color:#E05050" id="qEmailInv">12,3%</div><div class="ks">Da base total</div><span class="trend td">↑ 0,4%</span></div>
         <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050" id="qNumInv">8,7%</div><div class="ks">Da base total</div><span class="trend td">↑ 0,2%</span></div>
       </div>
-      <div class="row2">
-        <div class="pn">
-          <div class="pt">Crescimento da base <sup style="color:#7C6EDB">¹</sup></div>
-          <div style="position:relative;width:100%;height:160px"><canvas id="cQcr"></canvas></div>
-          <div class="leg"><div class="li"><span class="ld" style="background:#5DBE8A"></span>Novos contatos</div><div class="li"><span class="ld" style="background:#E8B0B0"></span>Opt-outs + inválidos</div></div>
-        </div>
-        <div class="pn">
-          <div class="pt">Taxa de descadastro por campanha <sup style="color:#7C6EDB">¹</sup></div>
-          <div style="position:relative;width:100%;height:160px"><canvas id="cQdc"></canvas></div>
-          <div style="font-size:9px;color:#9CA3AF;margin-top:6px">% opt-out / e-mails entregues · estimado por campanha</div>
-        </div>
-      </div>
-      <div class="sec-hdr">Segmentações (Listas de Disparo) <span style="font-size:9px;color:#9CA3AF;font-weight:400;margin-left:6px">¹ estimado</span></div>
-      <div class="row1 pn">
-        <div class="pt">Qualidade por segmentação</div>
-        <table>
-          <thead><tr><th class="s">Segmentação</th><th class="nr s">Total</th><th class="nr s">Válidos</th><th class="nr s">E-mails inv.</th><th class="nr s">Opt-outs <sup style="color:#7C6EDB">¹</sup></th><th class="rr s">Qualidade</th></tr></thead>
-          <tbody>
-            <tr><td><span class="seg-pill">cursos_livres — ex-alunos + interesses + ocorrências</span></td><td class="nr">1.185.783</td><td class="nr">1.184.574</td><td class="nr" style="color:#E05050">1.209</td><td class="nr" style="color:#7C6EDB">~14.200</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
-            <tr><td><span class="seg-pill">idiomas — alunos + ex-alunos + interesses</span></td><td class="nr">378.247</td><td class="nr">376.580</td><td class="nr" style="color:#E05050">1.667</td><td class="nr" style="color:#7C6EDB">~2.270</td><td class="rr"><span class="badge ok">99,6%</span></td></tr>
-            <tr><td><span class="seg-pill">processo_seletivo_EAD — descontos bacharelado</span></td><td class="nr">235.893</td><td class="nr">235.718</td><td class="nr" style="color:#E05050">175</td><td class="nr" style="color:#7C6EDB">~940</td><td class="rr"><span class="badge ok">99,9%</span></td></tr>
-            <tr><td><span class="seg-pill">meu_senac — alunos cursando + responsáveis</span></td><td class="nr">92.929</td><td class="nr">92.415</td><td class="nr" style="color:#E05050">514</td><td class="nr" style="color:#7C6EDB">~280</td><td class="rr"><span class="badge ok">99,4%</span></td></tr>
-            <tr><td><span class="seg-pill">pos_graduacao — inscrições prorrogadas</span></td><td class="nr">22.681</td><td class="nr">22.681</td><td class="nr" style="color:#E05050">0</td><td class="nr" style="color:#7C6EDB">~23</td><td class="rr"><span class="badge ok">100%</span></td></tr>
-            <tr class="tfoot"><td><strong>Total (amostra)</strong></td><td class="nr"><strong>1.915.533</strong></td><td class="nr"><strong>1.911.968</strong></td><td class="nr" style="color:#E05050"><strong>3.565</strong></td><td class="nr" style="color:#7C6EDB"><strong>~17.713</strong></td><td class="rr"><span class="badge ok">99,8%</span></td></tr>
-          </tbody>
-        </table>
-        <div class="ftnt"><sup style="color:#7C6EDB">¹</sup> Valores de opt-out estimados. Campo não disponível nos relatórios do CRM. Pendência GTI.</div>
+      <div class="row1 pn" style="margin-bottom:9px">
+        <div class="pt">Crescimento da base <sup style="color:#7C6EDB">¹</sup></div>
+        <div style="position:relative;width:100%;height:160px"><canvas id="cQcr"></canvas></div>
+        <div class="leg"><div class="li"><span class="ld" style="background:#5DBE8A"></span>Novos contatos</div><div class="li"><span class="ld" style="background:#E8B0B0"></span>Opt-outs + inválidos</div></div>
       </div>
     </div>
 
@@ -553,7 +627,7 @@ async function carregarDadosRemoto() {
     }
 
     // ── Reconstrói charts e re-renderiza todas as abas
-    [chartEl, chartEl2, chartSms, chartQcr, chartQdc, chartOp, chartIp, chartPp].forEach(c => c && c.destroy());
+    [chartEl, chartEl2, chartSms, chartQcr, chartOp, chartIp, chartPp].forEach(c => c && c.destroy());
     mkCharts();
     renderEmail(); renderCampOverview();
     renderSms();
@@ -808,7 +882,7 @@ const iData={
 iData.GCR=iData.todas;
 
 // ─── CHARTS ───────────────────────────────────────────────────────────────────
-let chartEl=null,chartEl2=null,chartSms=null,chartQcr=null,chartQdc=null,chartOp=null,chartIp=null,chartPp=null;
+let chartEl=null,chartEl2=null,chartSms=null,chartQcr=null,chartOp=null,chartIp=null,chartPp=null;
 
 function mkCharts(){
   chartEl=new Chart(document.getElementById('cEl'),{type:'line',data:{labels:MOS,datasets:[
@@ -835,11 +909,6 @@ function mkCharts(){
     {data:QD.todas.novos, backgroundColor:'#5DBE8A',borderRadius:3,label:'Novos'},
     {data:QD.todas.saidas,backgroundColor:'#E8B0B0',borderRadius:3,label:'Saídas'},
   ]},options:{...base,scales:{x:{...xa,stacked:true},y:{grid:{color:'#F3F4F6'},stacked:true,ticks:{font:{size:10},color:'#9CA3AF',callback:v=>Math.abs(v)>=1000?(v<0?'-':'')+(Math.abs(v)/1000).toFixed(0)+'k':v}}}}});
-
-  chartQdc=new Chart(document.getElementById('cQdc'),{type:'bar',data:{
-    labels:['cursos_livres','meu_senac','avisos','cursos_tec.','idiomas','pos_grad'],
-    datasets:[{data:[1.2,0.3,0.5,0.8,0.6,0.1],backgroundColor:['#E05050','#5DBE8A','#F5C842','#F47920','#F47920','#5DBE8A'],borderRadius:4}]
-  },options:{...base,scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#9CA3AF'}},y:{grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF',callback:v=>v+'%'},max:1.5}}}});
 
   chartOp=new Chart(document.getElementById('cOp'),{type:'line',data:{labels:MOS,datasets:[
     {data:OP.todas.mfila,borderColor:'#F47920',backgroundColor:'rgba(244,121,32,0.08)',fill:true,pointRadius:4,borderWidth:2,tension:0.3}
@@ -918,23 +987,95 @@ function renderEmail(){
   document.getElementById('eInv').textContent=fmtN(ti);
   document.getElementById('eAb').textContent=fmtN(ta);
   document.getElementById('eCl').textContent=fmtN(tc);
-  document.getElementById('eInvSub').textContent='Hard bounce · '+(td>0?(ti/td*100).toFixed(1):'0')+'%';
+  document.getElementById('eInvSub').textContent='Hard bounce';
+
+  // Percentuais inline (% do base relevante)
+  const setKpct=(id,val,dec)=>{const el=document.getElementById(id);if(el)el.textContent=val!=null?val.toFixed(dec||1)+'%':'';};
+  if(td>0){setKpct('eEntPct',te/td*100);setKpct('eInvPct',ti/td*100);}
+  if(te>0){setKpct('eAbPct',ta/te*100);setKpct('eClPct',tc/te*100,2);}
+
+  // Setas de tendência (último mês vs anterior no filtro)
+  const setTrend=(id,curr,prev,invertido)=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(prev==null||Math.abs(curr-prev)<0.05){el.textContent='';el.className='trend';return;}
+    const diff=curr-prev;
+    const subiu=diff>0;
+    const positivo=invertido?!subiu:subiu;
+    el.className='trend '+(positivo?'tu':'td');
+    el.textContent=(subiu?'↑':'↓')+' '+Math.abs(diff).toFixed(1)+'pp';
+  };
+  const lastI=idx[idx.length-1];const prevI=idx.length>=2?idx[idx.length-2]:null;
+  const safeR=(arr,i)=>(arr&&arr[i]!=null?arr[i]:0)*1000;
+  const lD=safeR(em.disp,lastI),lE=safeR(em.ent,lastI),lI=safeR(em.inv,lastI),lA=safeR(em.ab,lastI),lC=safeR(em.cl,lastI);
+  const pD=prevI!=null?safeR(em.disp,prevI):null,pE=prevI!=null?safeR(em.ent,prevI):null;
+  const pI=prevI!=null?safeR(em.inv,prevI):null,pA=prevI!=null?safeR(em.ab,prevI):null,pC=prevI!=null?safeR(em.cl,prevI):null;
+  setTrend('eEntTrend',lD>0?lE/lD*100:0,pD?pE/pD*100:null,false);
+  setTrend('eInvTrend',lD>0?lI/lD*100:0,pD?pI/pD*100:null,true);  // inválidos: queda é bom
+  setTrend('eAbTrend', lE>0?lA/lE*100:0,pE?pA/pE*100:null,false);
+  setTrend('eClTrend', lE>0?lC/lE*100:0,pE?pC/pE*100:null,false);
+
   if(te>0){
     document.getElementById('eTxEnt').textContent=(te/td*100).toFixed(1)+'%';
     document.getElementById('eTxAb').textContent=(ta/te*100).toFixed(1)+'%';
     document.getElementById('eCtr').textContent=(tc/te*100).toFixed(2)+'%';
   }
 
-  // Gráfico 1: Disparados + Entregues
+  // Gráficos — diário se período ≤35 dias E DETAIL tem datas, mensal caso contrário
+  const daySpan=Math.round((ST.to-ST.from)/(1000*86400));
+  let tl=null;
+  if(daySpan<=35){
+    const daily={};
+    Object.values(DETAIL).forEach(camp=>{
+      (camp.acoes||[]).forEach(a=>{
+        if(!a.data)return;
+        const pts=a.data.split('/');if(pts.length!==3)return;
+        const dObj=new Date(+pts[2],+pts[1]-1,+pts[0]);
+        if(dObj<ST.from||dObj>ST.to)return;
+        if(!daily[a.data])daily[a.data]={disp:0,ent:0,ab:0,cl:0,inv:0,dObj};
+        const ent=+a.ent||0;
+        daily[a.data].ent+=ent;
+        daily[a.data].disp+=a.disp!=null?+a.disp:ent;
+        daily[a.data].ab+=ent*(+a.ab/100);
+        daily[a.data].cl+=ent*(+a.ctr/100);
+      });
+    });
+    const entries=Object.values(daily).sort((a,b)=>a.dObj-b.dObj);
+    if(entries.length>=2){
+      tl={
+        labels:entries.map(e=>e.dObj.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})),
+        disp:entries.map(e=>+(e.disp/1000).toFixed(1)),
+        ent:entries.map(e=>+(e.ent/1000).toFixed(1)),
+        inv:entries.map(e=>+(e.inv/1000).toFixed(1)),
+        ab:entries.map(e=>+(e.ab/1000).toFixed(1)),
+        cl:entries.map(e=>+(e.cl/1000).toFixed(2)),
+        isDaily:true
+      };
+    }
+  }
+  if(!tl){
+    tl={
+      labels:idx.map(i=>MOS[i]),
+      disp:idx.map(i=>safe(em.disp,i)),ent:idx.map(i=>safe(em.ent,i)),
+      inv:idx.map(i=>safe(em.inv,i)),ab:idx.map(i=>safe(em.ab,i)),cl:idx.map(i=>safe(em.cl,i)),
+      isDaily:false
+    };
+  }
+  const granLabel=tl.isDaily?'diário':'mensal';
   if(chartEl){
-    chartEl.data.labels=idx.map(i=>MOS[i]);
-    [em.disp,em.ent].forEach((arr,di)=>{chartEl.data.datasets[di].data=idx.map(i=>safe(arr,i));});
+    chartEl.data.labels=tl.labels;
+    chartEl.data.datasets[0].data=tl.disp;
+    chartEl.data.datasets[1].data=tl.ent;
+    const t1=document.getElementById('eChart1Title');
+    if(t1)t1.textContent='Volume '+granLabel+' — Disparados e Entregues (mil)';
     chartEl.update();
   }
-  // Gráfico 2: Inválidos + Aberturas + Cliques
   if(chartEl2){
-    chartEl2.data.labels=idx.map(i=>MOS[i]);
-    [em.inv,em.ab,em.cl].forEach((arr,di)=>{chartEl2.data.datasets[di].data=idx.map(i=>safe(arr,i));});
+    chartEl2.data.labels=tl.labels;
+    chartEl2.data.datasets[0].data=tl.inv;
+    chartEl2.data.datasets[1].data=tl.ab;
+    chartEl2.data.datasets[2].data=tl.cl;
+    const t2=document.getElementById('eChart2Title');
+    if(t2)t2.textContent='Engajamento '+granLabel+' — Inválidos, Aberturas e Cliques (mil)';
     chartEl2.update();
   }
 
@@ -1170,7 +1311,7 @@ function sw(id,btn){
   if(id==='e'&&chartEl&&chartEl2){setTimeout(()=>{chartEl.resize();chartEl2.resize();chartEl.update('none');chartEl2.update('none');},50);}
   if(id==='s'&&chartSms){setTimeout(()=>{chartSms.resize();renderSms();},50);}
   if(id==='i'&&chartIp&&chartPp){setTimeout(()=>{chartIp.resize();chartPp.resize();chartIp.update('none');chartPp.update('none');},50);}
-  if(id==='q'&&chartQcr&&chartQdc){setTimeout(()=>{chartQcr.resize();chartQdc.resize();chartQcr.update('none');chartQdc.update('none');},50);}
+  if(id==='q'&&chartQcr){setTimeout(()=>{chartQcr.resize();chartQcr.update('none');},50);}
   if(id==='o'&&chartOp){setTimeout(()=>{chartOp.resize();chartOp.update('none');},50);}
 }
 
