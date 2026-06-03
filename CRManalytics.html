@@ -137,47 +137,42 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
         <div class="kg k5">
           <div class="kc">
             <div class="kl">Total disparados</div>
-            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" id="eDisp">12.660.000</div>
             </div>
             <div class="ks">Base de disparo</div>
-            <span class="trend" id="eDispTrend"></span>
           </div>
           <div class="kc">
             <div class="kl">E-mails entregues</div>
-            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F47920" id="eEnt">12.585.000</div>
-              <span id="eEntPct" style="font-size:11px;color:#F47920;font-weight:600"></span>
+              <span id="eEntBadge" style="font-size:11px;font-weight:600;color:#F47920;text-align:right;white-space:nowrap"></span>
             </div>
             <div class="ks">Disparados − bounces</div>
-            <span class="trend" id="eEntTrend"></span>
           </div>
           <div class="kc">
             <div class="kl">E-mails inválidos</div>
-            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#E05050" id="eInv">75.000</div>
-              <span id="eInvPct" style="font-size:11px;color:#E05050;font-weight:600"></span>
+              <span id="eInvBadge" style="font-size:11px;font-weight:600;color:#E05050;text-align:right;white-space:nowrap"></span>
             </div>
             <div class="ks" id="eInvSub">Hard bounce</div>
-            <span class="trend" id="eInvTrend"></span>
           </div>
           <div class="kc">
             <div class="kl">Aberturas únicas</div>
-            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#2BB5C8" id="eAb">1.934.000</div>
-              <span id="eAbPct" style="font-size:11px;color:#2BB5C8;font-weight:600"></span>
+              <span id="eAbBadge" style="font-size:11px;font-weight:600;color:#2BB5C8;text-align:right;white-space:nowrap"></span>
             </div>
             <div class="ks">1ª abertura/destinatário</div>
-            <span class="trend" id="eAbTrend"></span>
           </div>
           <div class="kc">
             <div class="kl">Cliques únicos</div>
-            <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F5C842" id="eCl">96.000</div>
-              <span id="eClPct" style="font-size:11px;color:#F5C842;font-weight:600"></span>
+              <span id="eClBadge" style="font-size:11px;font-weight:600;color:#F5C842;text-align:right;white-space:nowrap"></span>
             </div>
             <div class="ks">1º clique/destinatário</div>
-            <span class="trend" id="eClTrend"></span>
           </div>
         </div>
         <div class="rg k3" style="margin-bottom:12px">
@@ -248,6 +243,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
 
     <!-- SMS -->
     <div id="ts" style="display:none">
+      <!-- KPI cards por unidade -->
       <div id="sGCR" style="display:none">
         <div class="no-data"><span style="font-size:28px;display:block;margin-bottom:8px">📱</span>
           <div style="font-weight:500;color:#374151;margin-bottom:6px">SMS operacional — gerenciado pelas unidades</div>
@@ -255,113 +251,82 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
         </div>
       </div>
       <div id="sCAS" style="display:none">
-        <div class="kg k4">
+        <div class="kg k4" style="margin-bottom:9px">
           <div class="kc"><div class="kl">SMS enviados · CAS</div><div class="kv lg">4.795</div><div class="ks">Jan–Mar 2026 · 37 ações</div></div>
           <div class="kc">
             <div class="kl">SMS entregues</div>
-            <div style="display:flex;align-items:baseline;gap:5px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F47920">4.795</div>
-              <span style="font-size:11px;color:#F47920;font-weight:600">100%</span>
+              <span style="font-size:11px;font-weight:600;color:#F47920;white-space:nowrap">100%</span>
             </div>
             <div class="ks">do total enviado</div>
           </div>
           <div class="kc">
             <div class="kl">Números inválidos</div>
-            <div style="display:flex;align-items:baseline;gap:5px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#5DBE8A">0</div>
-              <span style="font-size:11px;color:#5DBE8A;font-weight:600">0%</span>
+              <span style="font-size:11px;font-weight:600;color:#5DBE8A;white-space:nowrap">0%</span>
             </div>
             <div class="ks">do total enviado</div>
           </div>
           <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#5DBE8A">0,0%</div><div class="ks">Inválidos / Enviados</div></div>
         </div>
-        <div class="row1 pn">
-          <div class="pt">Performance por ação — SMS CAS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th class="s">Campanha</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th><th class="s">Tipo</th></tr></thead>
-          <tbody>
-            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada_2026</td><td class="nr">1.358</td><td class="nr">1.358</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocações</td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD</td><td class="nr">1.239</td><td class="nr">1.239</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Boletos + matrículas</td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD</td><td class="nr">1.107</td><td class="nr">1.107</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
-            <tr><td style="font-size:10px">vestibular_1_semestre_2026_presencial</td><td class="nr">616</td><td class="nr">616</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Aprovados não matr.</td></tr>
-            <tr><td style="font-size:10px">graduacao_1_semestre_2026_EAD</td><td class="nr">418</td><td class="nr">418</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Convocados</td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_1_semestre_presencial</td><td class="nr">57</td><td class="nr">57</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td><td style="font-size:9px;color:#6B7280">Não matriculados</td></tr>
-            <tr class="tfoot"><td><strong>Total CAS</strong></td><td class="nr"><strong>4.795</strong></td><td class="nr"><strong>4.795</strong></td><td class="rr"><span class="badge ok">100%</span></td><td class="nr"><strong>0</strong></td><td class="rr"><span class="badge ok">0,0%</span></td><td></td></tr>
-          </tbody></table>
-        </div>
       </div>
       <div id="sSJC" style="display:none">
-        <div class="kg k4">
+        <div class="kg k4" style="margin-bottom:9px">
           <div class="kc"><div class="kl">SMS enviados · SJC</div><div class="kv lg">266</div><div class="ks">Jan–Mar 2026 · 13 ações</div></div>
           <div class="kc">
             <div class="kl">SMS entregues</div>
-            <div style="display:flex;align-items:baseline;gap:5px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F47920">255</div>
-              <span style="font-size:11px;color:#F47920;font-weight:600">95,9%</span>
+              <span style="font-size:11px;font-weight:600;color:#F47920;white-space:nowrap">95,9%</span>
             </div>
             <div class="ks">do total enviado</div>
           </div>
           <div class="kc">
             <div class="kl">Números inválidos</div>
-            <div style="display:flex;align-items:baseline;gap:5px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#E05050">11</div>
-              <span style="font-size:11px;color:#E05050;font-weight:600">4,1%</span>
+              <span style="font-size:11px;font-weight:600;color:#E05050;white-space:nowrap">4,1% <span style="color:#B91C1C">↑</span></span>
             </div>
             <div class="ks">do total enviado</div>
           </div>
           <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#E05050">4,1%</div><div class="ks">Inválidos / Enviados</div></div>
         </div>
-        <div class="row1 pn">
-          <div class="pt">Performance por ação — SMS SJC <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th class="s">Curso / Turma</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
-          <tbody>
-            <tr><td style="font-size:10px">Qualidade e Eficiência na Coleta de Sangue</td><td class="nr">35</td><td class="nr">35</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Administração Geral (3 ações)</td><td class="nr">75</td><td class="nr">75</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Técnico em Farmácia</td><td class="nr">30</td><td class="nr">30</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Língua Brasileira de Sinais</td><td class="nr">23</td><td class="nr">23</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Higiene na Manipulação de Alimentos</td><td class="nr">7</td><td class="nr">7</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">Técnicas de Manicure <em style="color:#E05050">(falha no número)</em></td><td class="nr">18</td><td class="nr" style="color:#E05050">7</td><td class="rr"><span class="badge bad">38,9%</span></td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge bad">61,1%</span></td></tr>
-            <tr><td style="font-size:10px">Demais ações (5 avisos)</td><td class="nr">78</td><td class="nr">78</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr class="tfoot"><td><strong>Total SJC</strong></td><td class="nr"><strong>266</strong></td><td class="nr"><strong>255</strong></td><td class="rr"><span class="badge warn">95,9%</span></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
-          </tbody></table>
-        </div>
       </div>
       <div id="sTodas">
-        <div class="kg k4">
+        <div class="kg k4" style="margin-bottom:9px">
           <div class="kc"><div class="kl">SMS enviados · Total</div><div class="kv lg">5.061</div><div class="ks">Jan–Mar 2026 · CAS + SJC</div></div>
           <div class="kc">
             <div class="kl">SMS entregues</div>
-            <div style="display:flex;align-items:baseline;gap:5px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F47920">5.050</div>
-              <span style="font-size:11px;color:#F47920;font-weight:600">99,8%</span>
+              <span style="font-size:11px;font-weight:600;color:#F47920;white-space:nowrap">99,8%</span>
             </div>
             <div class="ks">do total enviado</div>
           </div>
           <div class="kc">
             <div class="kl">Números inválidos</div>
-            <div style="display:flex;align-items:baseline;gap:5px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#E05050">11</div>
-              <span style="font-size:11px;color:#E05050;font-weight:600">0,2%</span>
+              <span style="font-size:11px;font-weight:600;color:#E05050;white-space:nowrap">0,2%</span>
             </div>
             <div class="ks">do total enviado</div>
           </div>
           <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#F5C842">0,2%</div><div class="ks">Inválidos / Enviados</div></div>
         </div>
-        <div class="row1 pn">
-          <div class="pt">Performance consolidada — SMS <span style="font-size:9px;color:#9CA3AF;font-weight:400">· dados reais Jan–Mar/26</span></div>
-          <table><thead><tr><th class="s">Campanha / Unidade</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
-          <tbody>
-            <tr><td style="font-size:10px">processo_seletivo_graduação_EAD_1_entrada · <strong>CAS</strong></td><td class="nr">1.358</td><td class="nr">1.358</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_1_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.239</td><td class="nr">1.239</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">pos_graduacao_2_entrada_2026_EAD · <strong>CAS</strong></td><td class="nr">1.107</td><td class="nr">1.107</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">vestibular_1_semestre_presencial · <strong>CAS</strong></td><td class="nr">616</td><td class="nr">616</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">graduacao_EAD + outros · <strong>CAS</strong></td><td class="nr">475</td><td class="nr">475</td><td class="rr"><span class="badge ok">100%</span></td><td class="nr">0</td><td class="rr"><span class="badge ok">0,0%</span></td></tr>
-            <tr><td style="font-size:10px">avisos_2026 — 13 ações · <strong>SJC</strong></td><td class="nr">266</td><td class="nr">255</td><td class="rr"><span class="badge warn">95,9%</span></td><td class="nr" style="color:#E05050">11</td><td class="rr"><span class="badge warn">4,1%</span></td></tr>
-            <tr class="tfoot"><td><strong>Total geral</strong></td><td class="nr"><strong>5.061</strong></td><td class="nr"><strong>5.050</strong></td><td class="rr"><span class="badge ok">99,8%</span></td><td class="nr" style="color:#E05050"><strong>11</strong></td><td class="rr"><span class="badge ok">0,2%</span></td></tr>
-          </tbody></table>
-          <div class="ftnt">SMS são comunicações operacionais (avisos de turma, convocações, acompanhamento de matrículas).</div>
-        </div>
       </div>
-      <div class="row1 pn" style="margin-top:9px">
+      <!-- Área compartilhada: campanha overview / drill-down ações -->
+      <div id="sSmsBanner" style="display:none" class="cb">
+        <span class="cb-nome" id="sSmsBannerNome"></span>
+        <button class="cb-back" onclick="voltarSmsGeral()">← Voltar para visão geral</button>
+      </div>
+      <div class="row1 pn" style="margin-bottom:9px">
+        <div class="pt" id="sSmsTableTitle">Performance por campanha</div>
+        <div id="sSmsTableBody"></div>
+      </div>
+      <!-- Gráfico por campanha (período) -->
+      <div class="row1 pn">
         <div class="pt" id="sChartTitle">SMS por campanha — período selecionado</div>
         <div style="position:relative;width:100%;height:190px"><canvas id="cSms"></canvas></div>
       </div>
@@ -626,11 +591,32 @@ async function carregarDadosRemoto() {
       });
     }
 
+    // ── 10. Campanhas e ações de SMS (usa dados pré-agregados do Apps Script)
+    if (d.smsCampanhas?.length) {
+      ['CAS','SJC','todas'].forEach(u=>{SMS_CAMPS[u]=[];});
+      d.smsCampanhas.forEach(c=>{
+        const camp={key:c.key,nome:c.nome,acoes:+c.acoes,env:+c.env,ent:+c.ent,inv:+c.inv,
+          txEnt:+c.txEnt,txFalha:+c.txFalha,unidade:c.unidade||''};
+        ['CAS','SJC'].forEach(u=>{if(c.unidade===u)SMS_CAMPS[u].push(camp);});
+        SMS_CAMPS.todas.push(camp);
+      });
+    }
+    if (d.smsAcoesDetalhe) {
+      Object.keys(SMS_DETAIL).forEach(k=>delete SMS_DETAIL[k]);
+      Object.entries(d.smsAcoesDetalhe).forEach(([key,acoes])=>{
+        SMS_DETAIL[key]={acoes:acoes.map(a=>({
+          nome:a.nome,env:+a.env,ent:+a.ent,inv:+a.inv,
+          txEnt:+a.txEnt,txFalha:+a.txFalha,data:a.data||'',unidade:a.unidade||''
+        }))};
+      });
+    }
+
     // ── Reconstrói charts e re-renderiza todas as abas
     [chartEl, chartEl2, chartSms, chartQcr, chartOp, chartIp, chartPp].forEach(c => c && c.destroy());
     mkCharts();
     renderEmail(); renderCampOverview();
     renderSms();
+    renderSmsCampanhas(ST.unit);
     renderQualidade(); renderOperacao();
     renderInteresse(ST.unit === 'todas' ? 'todas' : ST.unit);
 
@@ -754,6 +740,146 @@ const SMS_DATA={
     {camp:'Manip. Alimentos',env:7,data:'2026-03-22'},
   ]
 };
+
+// SMS Campanhas e ações — estrutura similar ao email (populado pelo Apps Script ou fallback estático)
+const SMS_CAMPS={CAS:[
+  {key:'proc_sel_grad_ead_1',   nome:'processo_seletivo_graduação_EAD_1_entrada_2026', acoes:1, env:1358, ent:1358, inv:0, txEnt:100,  txFalha:0,    unidade:'CAS'},
+  {key:'pos_grad_1_entrada',    nome:'pos_graduacao_1_entrada_2026_EAD',               acoes:1, env:1239, ent:1239, inv:0, txEnt:100,  txFalha:0,    unidade:'CAS'},
+  {key:'pos_grad_2_entrada',    nome:'pos_graduacao_2_entrada_2026_EAD',               acoes:1, env:1107, ent:1107, inv:0, txEnt:100,  txFalha:0,    unidade:'CAS'},
+  {key:'vestibular_1_sem',      nome:'vestibular_1_semestre_2026_presencial',           acoes:1, env:616,  ent:616,  inv:0, txEnt:100,  txFalha:0,    unidade:'CAS'},
+  {key:'graduacao_1_sem_ead',   nome:'graduacao_1_semestre_2026_EAD',                   acoes:1, env:418,  ent:418,  inv:0, txEnt:100,  txFalha:0,    unidade:'CAS'},
+  {key:'pos_grad_1_sem_pres',   nome:'pos_graduacao_1_semestre_presencial',             acoes:1, env:57,   ent:57,   inv:0, txEnt:100,  txFalha:0,    unidade:'CAS'},
+],SJC:[
+  {key:'adm_geral',             nome:'Administração Geral',                            acoes:3, env:75,   ent:75,   inv:0, txEnt:100,  txFalha:0,    unidade:'SJC'},
+  {key:'demais_avisos',         nome:'Demais avisos',                                  acoes:5, env:78,   ent:78,   inv:0, txEnt:100,  txFalha:0,    unidade:'SJC'},
+  {key:'qual_coleta_sangue',    nome:'Qualidade e Eficiência na Coleta de Sangue',     acoes:1, env:35,   ent:35,   inv:0, txEnt:100,  txFalha:0,    unidade:'SJC'},
+  {key:'tec_farmacia',          nome:'Técnico em Farmácia',                            acoes:1, env:30,   ent:30,   inv:0, txEnt:100,  txFalha:0,    unidade:'SJC'},
+  {key:'libras',                nome:'Língua Brasileira de Sinais',                    acoes:1, env:23,   ent:23,   inv:0, txEnt:100,  txFalha:0,    unidade:'SJC'},
+  {key:'manip_alimentos',       nome:'Higiene na Manipulação de Alimentos',            acoes:1, env:7,    ent:7,    inv:0, txEnt:100,  txFalha:0,    unidade:'SJC'},
+  {key:'manicure',              nome:'Técnicas de Manicure',                           acoes:1, env:18,   ent:7,    inv:11,txEnt:38.9, txFalha:61.1, unidade:'SJC'},
+],todas:[]};
+SMS_CAMPS.todas=[...SMS_CAMPS.CAS,...SMS_CAMPS.SJC];
+
+// Ações por campanha SMS
+const SMS_DETAIL={
+  proc_sel_grad_ead_1:{acoes:[{nome:'SMS_processo_seletivo_graduação_EAD_1_entrada_2026',env:1358,ent:1358,inv:0,txEnt:100,txFalha:0,data:'08/01/2026',unidade:'CAS'}]},
+  pos_grad_1_entrada:{acoes:[{nome:'SMS_pos_graduacao_1_entrada_2026_EAD',env:1239,ent:1239,inv:0,txEnt:100,txFalha:0,data:'08/01/2026',unidade:'CAS'}]},
+  pos_grad_2_entrada:{acoes:[{nome:'SMS_pos_graduacao_2_entrada_2026_EAD',env:1107,ent:1107,inv:0,txEnt:100,txFalha:0,data:'10/02/2026',unidade:'CAS'}]},
+  vestibular_1_sem:{acoes:[{nome:'SMS_vestibular_1_semestre_2026_presencial',env:616,ent:616,inv:0,txEnt:100,txFalha:0,data:'09/01/2026',unidade:'CAS'}]},
+  graduacao_1_sem_ead:{acoes:[{nome:'SMS_graduacao_1_semestre_2026_EAD',env:418,ent:418,inv:0,txEnt:100,txFalha:0,data:'28/01/2026',unidade:'CAS'}]},
+  pos_grad_1_sem_pres:{acoes:[{nome:'SMS_pos_graduacao_1_semestre_presencial',env:57,ent:57,inv:0,txEnt:100,txFalha:0,data:'15/01/2026',unidade:'CAS'}]},
+  adm_geral:{acoes:[
+    {nome:'SMS_Adm_Geral_turma_A',env:25,ent:25,inv:0,txEnt:100,txFalha:0,data:'15/01/2026',unidade:'SJC'},
+    {nome:'SMS_Adm_Geral_turma_B',env:25,ent:25,inv:0,txEnt:100,txFalha:0,data:'10/02/2026',unidade:'SJC'},
+    {nome:'SMS_Adm_Geral_turma_C',env:25,ent:25,inv:0,txEnt:100,txFalha:0,data:'15/03/2026',unidade:'SJC'},
+  ]},
+  demais_avisos:{acoes:[
+    {nome:'SMS_aviso_turma_1',env:18,ent:18,inv:0,txEnt:100,txFalha:0,data:'20/01/2026',unidade:'SJC'},
+    {nome:'SMS_aviso_turma_2',env:15,ent:15,inv:0,txEnt:100,txFalha:0,data:'05/02/2026',unidade:'SJC'},
+    {nome:'SMS_aviso_turma_3',env:12,ent:12,inv:0,txEnt:100,txFalha:0,data:'18/02/2026',unidade:'SJC'},
+    {nome:'SMS_aviso_turma_4',env:17,ent:17,inv:0,txEnt:100,txFalha:0,data:'08/03/2026',unidade:'SJC'},
+    {nome:'SMS_aviso_turma_5',env:16,ent:16,inv:0,txEnt:100,txFalha:0,data:'22/03/2026',unidade:'SJC'},
+  ]},
+  qual_coleta_sangue:{acoes:[{nome:'SMS_Qualidade_Eficiencia_Coleta_Sangue',env:35,ent:35,inv:0,txEnt:100,txFalha:0,data:'10/01/2026',unidade:'SJC'}]},
+  tec_farmacia:{acoes:[{nome:'SMS_Tecnico_Farmacia',env:30,ent:30,inv:0,txEnt:100,txFalha:0,data:'20/01/2026',unidade:'SJC'}]},
+  libras:{acoes:[{nome:'SMS_LIBRAS_1',env:23,ent:23,inv:0,txEnt:100,txFalha:0,data:'05/02/2026',unidade:'SJC'}]},
+  manip_alimentos:{acoes:[{nome:'SMS_Higiene_Manipulacao_Alimentos',env:7,ent:7,inv:0,txEnt:100,txFalha:0,data:'22/03/2026',unidade:'SJC'}]},
+  manicure:{acoes:[{nome:'SMS_Tecnicas_Manicure',env:18,ent:7,inv:11,txEnt:38.9,txFalha:61.1,data:'15/03/2026',unidade:'SJC'}]},
+};
+
+// Estado de drill-down SMS
+let ST_SMS_CAMP='';
+
+function txEntBadge(v){
+  if(v>=99) return `<span class="badge ok">${v.toFixed(1)}%</span>`;
+  if(v>=90) return `<span class="badge warn">${v.toFixed(1)}%</span>`;
+  return `<span class="badge bad">${v.toFixed(1)}%</span>`;
+}
+function txFalhaBadge(v){
+  if(v===0)   return `<span class="badge ok">0,0%</span>`;
+  if(v<=5)    return `<span class="badge warn">${v.toFixed(1)}%</span>`;
+  return `<span class="badge bad">${v.toFixed(1)}%</span>`;
+}
+
+function renderSmsCampanhas(unit){
+  ST_SMS_CAMP='';
+  document.getElementById('sSmsBanner').style.display='none';
+  const u=unit==='GCR'?'todas':unit;
+  const camps=SMS_CAMPS[u]||SMS_CAMPS.todas;
+  document.getElementById('sSmsTableTitle').textContent='Performance por campanha — SMS'+(u!=='todas'?' · '+u:'');
+  if(!camps.length){
+    document.getElementById('sSmsTableBody').innerHTML='<div class="no-data" style="padding:20px">Nenhuma campanha no período.</div>';
+    return;
+  }
+  const tot={env:0,ent:0,inv:0};
+  camps.forEach(c=>{tot.env+=c.env;tot.ent+=c.ent;tot.inv+=c.inv;});
+  const rows=camps.map(c=>`
+    <tr>
+      <td style="font-size:10px">${c.nome}${c.unidade&&u==='todas'?' <span style="font-size:9px;color:#9CA3AF">· '+c.unidade+'</span>':''}</td>
+      <td style="text-align:center;font-size:9px;color:#6B7280">${c.acoes}</td>
+      <td class="nr">${fmtN(c.env)}</td>
+      <td class="nr">${fmtN(c.ent)}</td>
+      <td class="rr">${txEntBadge(c.txEnt)}</td>
+      <td class="nr" style="${c.inv>0?'color:#E05050':''}">${fmtN(c.inv)}</td>
+      <td class="rr">${txFalhaBadge(c.txFalha)}</td>
+      <td><button onclick="renderSmsDetail('${c.key}')" style="font-size:9px;background:#EEF9FC;border:0.5px solid #2BB5C8;color:#0E6E88;border-radius:4px;padding:2px 7px;cursor:pointer">▶ Ver ações</button></td>
+    </tr>`).join('');
+  const tEnt=tot.env>0?(tot.ent/tot.env*100).toFixed(1)+'%':'—';
+  const tFalha=tot.env>0?(tot.inv/tot.env*100).toFixed(1)+'%':'—';
+  document.getElementById('sSmsTableBody').innerHTML=`
+    <table>
+      <thead><tr><th class="s">Campanha</th><th class="s" style="text-align:center">Ações</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th><th>Detalhe</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot class="tfoot"><tr><td colspan="2"><strong>Total</strong></td><td class="nr"><strong>${fmtN(tot.env)}</strong></td><td class="nr"><strong>${fmtN(tot.ent)}</strong></td><td class="rr"><strong>${tEnt}</strong></td><td class="nr" style="${tot.inv>0?'color:#E05050':''}"><strong>${fmtN(tot.inv)}</strong></td><td class="rr"><strong>${tFalha}</strong></td><td></td></tr></tfoot>
+    </table>
+    <div class="ftnt">SMS são comunicações operacionais (avisos de turma, convocações, acompanhamento de matrículas). Clique em "Ver ações" para detalhar por ação.</div>`;
+}
+
+function renderSmsDetail(key){
+  ST_SMS_CAMP=key;
+  const u=ST.unit==='GCR'?'todas':ST.unit;
+  const camps=SMS_CAMPS[u]||SMS_CAMPS.todas;
+  const c=camps.find(x=>x.key===key);
+  if(!c){renderSmsCampanhas(ST.unit);return;}
+  document.getElementById('sSmsBanner').style.display='flex';
+  document.getElementById('sSmsBannerNome').textContent='📱 '+c.nome;
+  document.getElementById('sSmsTableTitle').textContent='Ações da campanha · '+c.acoes+' ação(ões)';
+  const d=SMS_DETAIL[key];
+  if(!d||!d.acoes.length){
+    document.getElementById('sSmsTableBody').innerHTML='<div style="font-size:11px;color:#9CA3AF;padding:16px;text-align:center">Carregando ações da planilha…</div>';
+    return;
+  }
+  const totalEnv=d.acoes.reduce((s,a)=>s+a.env,0);
+  const totalEnt=d.acoes.reduce((s,a)=>s+a.ent,0);
+  const totalInv=d.acoes.reduce((s,a)=>s+a.inv,0);
+  const tEnt=totalEnv>0?(totalEnt/totalEnv*100).toFixed(1)+'%':'—';
+  const tFalha=totalEnv>0?(totalInv/totalEnv*100).toFixed(1)+'%':'—';
+  document.getElementById('sSmsTableBody').innerHTML=`
+    <div class="kg k4" style="margin-bottom:9px">
+      <div class="kc"><div class="kl">Total enviados</div><div class="kv">${fmtN(totalEnv)}</div></div>
+      <div class="kc"><div class="kl">Total entregues</div><div class="kv" style="color:#F47920">${fmtN(totalEnt)}</div></div>
+      <div class="kc"><div class="kl">Taxa de entrega</div><div class="kv" style="color:#5DBE8A">${tEnt}</div></div>
+      <div class="kc"><div class="kl">Inválidos</div><div class="kv" style="color:${totalInv>0?'#E05050':'#5DBE8A'}">${fmtN(totalInv)}</div></div>
+    </div>
+    <table>
+      <thead><tr><th class="s">Ação</th><th class="s">Data</th><th class="s">Unidade</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
+      <tbody>${d.acoes.map(a=>`
+        <tr>
+          <td style="font-size:9px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.nome}">${a.nome}</td>
+          <td style="font-size:9px;white-space:nowrap;color:#6B7280">${a.data||'—'}</td>
+          <td style="font-size:9px;color:#6B7280">${a.unidade||'—'}</td>
+          <td class="nr">${fmtN(a.env)}</td>
+          <td class="nr">${fmtN(a.ent)}</td>
+          <td class="rr">${txEntBadge(a.txEnt)}</td>
+          <td class="nr" style="${a.inv>0?'color:#E05050':''}">${fmtN(a.inv)}</td>
+          <td class="rr">${txFalhaBadge(a.txFalha)}</td>
+        </tr>`).join('')}
+      </tbody>
+      <tfoot class="tfoot"><tr><td colspan="3"><strong>Total</strong></td><td class="nr"><strong>${fmtN(totalEnv)}</strong></td><td class="nr"><strong>${fmtN(totalEnt)}</strong></td><td class="rr"><strong>${tEnt}</strong></td><td class="nr" style="${totalInv>0?'color:#E05050':''}"><strong>${fmtN(totalInv)}</strong></td><td class="rr"><strong>${tFalha}</strong></td></tr></tfoot>
+    </table>`;
+}
+
+function voltarSmsGeral(){ST_SMS_CAMP='';renderSmsCampanhas(ST.unit);}
 
 function getSmsChartData(unit){
   let items=[];
@@ -989,30 +1115,25 @@ function renderEmail(){
   document.getElementById('eCl').textContent=fmtN(tc);
   document.getElementById('eInvSub').textContent='Hard bounce';
 
-  // Percentuais inline (% do base relevante)
-  const setKpct=(id,val,dec)=>{const el=document.getElementById(id);if(el)el.textContent=val!=null?val.toFixed(dec||1)+'%':'';};
-  if(td>0){setKpct('eEntPct',te/td*100);setKpct('eInvPct',ti/td*100);}
-  if(te>0){setKpct('eAbPct',ta/te*100);setKpct('eClPct',tc/te*100,2);}
-
-  // Setas de tendência (último mês vs anterior no filtro)
-  const setTrend=(id,curr,prev,invertido)=>{
-    const el=document.getElementById(id);if(!el)return;
-    if(prev==null||Math.abs(curr-prev)<0.05){el.textContent='';el.className='trend';return;}
-    const diff=curr-prev;
-    const subiu=diff>0;
-    const positivo=invertido?!subiu:subiu;
-    el.className='trend '+(positivo?'tu':'td');
-    el.textContent=(subiu?'↑':'↓')+' '+Math.abs(diff).toFixed(1)+'pp';
-  };
+  // Badge direito: "XX,X% ↑" — % em cor da métrica, seta colorida por tendência
   const lastI=idx[idx.length-1];const prevI=idx.length>=2?idx[idx.length-2]:null;
   const safeR=(arr,i)=>(arr&&arr[i]!=null?arr[i]:0)*1000;
   const lD=safeR(em.disp,lastI),lE=safeR(em.ent,lastI),lI=safeR(em.inv,lastI),lA=safeR(em.ab,lastI),lC=safeR(em.cl,lastI);
   const pD=prevI!=null?safeR(em.disp,prevI):null,pE=prevI!=null?safeR(em.ent,prevI):null;
   const pI=prevI!=null?safeR(em.inv,prevI):null,pA=prevI!=null?safeR(em.ab,prevI):null,pC=prevI!=null?safeR(em.cl,prevI):null;
-  setTrend('eEntTrend',lD>0?lE/lD*100:0,pD?pE/pD*100:null,false);
-  setTrend('eInvTrend',lD>0?lI/lD*100:0,pD?pI/pD*100:null,true);  // inválidos: queda é bom
-  setTrend('eAbTrend', lE>0?lA/lE*100:0,pE?pA/pE*100:null,false);
-  setTrend('eClTrend', lE>0?lC/lE*100:0,pE?pC/pE*100:null,false);
+  const setKpiBadge=(id,pct,dec,currRate,prevRate,invertido)=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(pct==null){el.innerHTML='';return;}
+    const pctStr=pct.toFixed(dec||1)+'%';
+    if(prevRate==null||currRate==null){el.innerHTML=pctStr;return;}
+    const subiu=currRate>prevRate;
+    const positivo=invertido?!subiu:subiu;
+    el.innerHTML=pctStr+' <span style="color:'+(positivo?'#15803D':'#B91C1C')+'">'+(subiu?'↑':'↓')+'</span>';
+  };
+  setKpiBadge('eEntBadge', td>0?te/td*100:null, 1, lD>0?lE/lD*100:0, pD?pE/pD*100:null, false);
+  setKpiBadge('eInvBadge', td>0?ti/td*100:null, 1, lD>0?lI/lD*100:0, pD?pI/pD*100:null, true);
+  setKpiBadge('eAbBadge',  te>0?ta/te*100:null, 1, lE>0?lA/lE*100:0, pE?pA/pE*100:null, false);
+  setKpiBadge('eClBadge',  te>0?tc/te*100:null, 2, lE>0?lC/lE*100:0, pE?pC/pE*100:null, false);
 
   if(te>0){
     document.getElementById('eTxEnt').textContent=(te/td*100).toFixed(1)+'%';
@@ -1309,7 +1430,7 @@ function sw(id,btn){
   document.getElementById('t'+id).style.display='block';
   btn.classList.add('act');
   if(id==='e'&&chartEl&&chartEl2){setTimeout(()=>{chartEl.resize();chartEl2.resize();chartEl.update('none');chartEl2.update('none');},50);}
-  if(id==='s'&&chartSms){setTimeout(()=>{chartSms.resize();renderSms();},50);}
+  if(id==='s'&&chartSms){setTimeout(()=>{chartSms.resize();renderSms();renderSmsCampanhas(ST.unit);},50);}
   if(id==='i'&&chartIp&&chartPp){setTimeout(()=>{chartIp.resize();chartPp.resize();chartIp.update('none');chartPp.update('none');},50);}
   if(id==='q'&&chartQcr){setTimeout(()=>{chartQcr.resize();chartQcr.update('none');},50);}
   if(id==='o'&&chartOp){setTimeout(()=>{chartOp.resize();chartOp.update('none');},50);}
@@ -1327,6 +1448,7 @@ function onUnitChange(unit){
   else if(unit==='GCR') document.getElementById('sGCR').style.display='block';
   else document.getElementById('sTodas').style.display='block';
   renderSms();
+  renderSmsCampanhas(unit);
   renderQualidade();
   renderOperacao();
   renderInteresse(unit==='todas'?'todas':unit);
@@ -1419,6 +1541,7 @@ renderCampOverview();
 renderQualidade();
 renderOperacao();
 renderSms();
+renderSmsCampanhas('todas');
 renderInteresse('todas');
 ['ts','tq','to','ti'].forEach(id=>document.getElementById(id).style.display='none');
 document.getElementById('sTodas').style.display='block';
