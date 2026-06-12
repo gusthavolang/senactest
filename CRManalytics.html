@@ -81,6 +81,9 @@ th.s:hover{background:#EAEDF2;color:#374151}
 th.s::after{content:' ⇅';opacity:0.3;font-size:8px}
 th.s.asc::after{content:' ↑';opacity:1;color:#F47920}
 th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
+tbody tr:not(.tfoot):hover td{background:#F8FAFD}
+td.nr,.rr,.kv,.rv{font-variant-numeric:tabular-nums}
+.fs:focus,button:focus-visible{outline:2px solid #F47920;outline-offset:1px}
 </style>
 
 <div class="w">
@@ -146,7 +149,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
             <div class="kl">E-mails entregues</div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F47920" id="eEnt">12.585.000</div>
-              <span id="eEntBadge" style="font-size:11px;font-weight:600;color:#F47920;text-align:right;white-space:nowrap"></span>
+              <span id="eEntBadge" style="text-align:right"></span>
             </div>
             <div class="ks">Disparados − bounces</div>
           </div>
@@ -154,7 +157,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
             <div class="kl">E-mails inválidos</div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#E05050" id="eInv">75.000</div>
-              <span id="eInvBadge" style="font-size:11px;font-weight:600;color:#E05050;text-align:right;white-space:nowrap"></span>
+              <span id="eInvBadge" style="text-align:right"></span>
             </div>
             <div class="ks" id="eInvSub">Hard bounce</div>
           </div>
@@ -162,7 +165,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
             <div class="kl">Aberturas únicas</div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#2BB5C8" id="eAb">1.934.000</div>
-              <span id="eAbBadge" style="font-size:11px;font-weight:600;color:#2BB5C8;text-align:right;white-space:nowrap"></span>
+              <span id="eAbBadge" style="text-align:right"></span>
             </div>
             <div class="ks">1ª abertura/destinatário</div>
           </div>
@@ -170,7 +173,7 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
             <div class="kl">Cliques únicos</div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
               <div class="kv lg" style="color:#F5C842" id="eCl">96.000</div>
-              <span id="eClBadge" style="font-size:11px;font-weight:600;color:#F5C842;text-align:right;white-space:nowrap"></span>
+              <span id="eClBadge" style="text-align:right"></span>
             </div>
             <div class="ks">1º clique/destinatário</div>
           </div>
@@ -243,79 +246,14 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
 
     <!-- SMS -->
     <div id="ts" style="display:none">
-      <!-- KPI cards por unidade -->
+      <!-- KPI cards — renderizados dinamicamente (refletem filtro de unidade + período) -->
       <div id="sGCR" style="display:none">
         <div class="no-data"><span style="font-size:28px;display:block;margin-bottom:8px">📱</span>
           <div style="font-weight:500;color:#374151;margin-bottom:6px">SMS operacional — gerenciado pelas unidades</div>
           <div>GCR não realiza SMS diretamente. Selecione <strong>CAS</strong>, <strong>SJC</strong> ou <strong>Todas</strong>.</div>
         </div>
       </div>
-      <div id="sCAS" style="display:none">
-        <div class="kg k4" style="margin-bottom:9px">
-          <div class="kc"><div class="kl">SMS enviados · CAS</div><div class="kv lg">4.795</div><div class="ks">Jan–Mar 2026 · 37 ações</div></div>
-          <div class="kc">
-            <div class="kl">SMS entregues</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <div class="kv lg" style="color:#F47920">4.795</div>
-              <span style="font-size:11px;font-weight:600;color:#F47920;white-space:nowrap">100%</span>
-            </div>
-            <div class="ks">do total enviado</div>
-          </div>
-          <div class="kc">
-            <div class="kl">Números inválidos</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <div class="kv lg" style="color:#5DBE8A">0</div>
-              <span style="font-size:11px;font-weight:600;color:#5DBE8A;white-space:nowrap">0%</span>
-            </div>
-            <div class="ks">do total enviado</div>
-          </div>
-          <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#5DBE8A">0,0%</div><div class="ks">Inválidos / Enviados</div></div>
-        </div>
-      </div>
-      <div id="sSJC" style="display:none">
-        <div class="kg k4" style="margin-bottom:9px">
-          <div class="kc"><div class="kl">SMS enviados · SJC</div><div class="kv lg">266</div><div class="ks">Jan–Mar 2026 · 13 ações</div></div>
-          <div class="kc">
-            <div class="kl">SMS entregues</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <div class="kv lg" style="color:#F47920">255</div>
-              <span style="font-size:11px;font-weight:600;color:#F47920;white-space:nowrap">95,9%</span>
-            </div>
-            <div class="ks">do total enviado</div>
-          </div>
-          <div class="kc">
-            <div class="kl">Números inválidos</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <div class="kv lg" style="color:#E05050">11</div>
-              <span style="font-size:11px;font-weight:600;color:#E05050;white-space:nowrap">4,1% <span style="color:#B91C1C">↑</span></span>
-            </div>
-            <div class="ks">do total enviado</div>
-          </div>
-          <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#E05050">4,1%</div><div class="ks">Inválidos / Enviados</div></div>
-        </div>
-      </div>
-      <div id="sTodas">
-        <div class="kg k4" style="margin-bottom:9px">
-          <div class="kc"><div class="kl">SMS enviados · Total</div><div class="kv lg">5.061</div><div class="ks">Jan–Mar 2026 · CAS + SJC</div></div>
-          <div class="kc">
-            <div class="kl">SMS entregues</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <div class="kv lg" style="color:#F47920">5.050</div>
-              <span style="font-size:11px;font-weight:600;color:#F47920;white-space:nowrap">99,8%</span>
-            </div>
-            <div class="ks">do total enviado</div>
-          </div>
-          <div class="kc">
-            <div class="kl">Números inválidos</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <div class="kv lg" style="color:#E05050">11</div>
-              <span style="font-size:11px;font-weight:600;color:#E05050;white-space:nowrap">0,2%</span>
-            </div>
-            <div class="ks">do total enviado</div>
-          </div>
-          <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:#F5C842">0,2%</div><div class="ks">Inválidos / Enviados</div></div>
-        </div>
-      </div>
+      <div id="sKpis" class="kg k4" style="margin-bottom:9px"></div>
       <!-- Área compartilhada: campanha overview / drill-down ações -->
       <div id="sSmsBanner" style="display:none" class="cb">
         <span class="cb-nome" id="sSmsBannerNome"></span>
@@ -337,9 +275,9 @@ th.s.desc::after{content:' ↓';opacity:1;color:#F47920}
       <div class="sec-hdr">Base <strong id="qUnidLabel">Geral</strong> <span style="font-size:9px;color:#9CA3AF;font-weight:400;margin-left:6px">¹ estimado — dados completos pendentes de GTI</span></div>
       <div class="kg k4">
         <div class="kc hl"><div class="kl">Total de contatos</div><div class="kv" style="font-size:16px;color:#fff" id="qTotal">1.284.900</div><div class="ks" id="qTotalSub">Base Única</div></div>
-        <div class="kc"><div class="kl">Qualidade da base</div><div class="kv lg" style="color:#5DBE8A" id="qQual">82,4%</div><div class="ks">Contatos válidos / total</div><span class="trend tu">↑ 1,2%</span></div>
-        <div class="kc"><div class="kl">E-mails inválidos</div><div class="kv lg" style="color:#E05050" id="qEmailInv">12,3%</div><div class="ks">Da base total</div><span class="trend td">↑ 0,4%</span></div>
-        <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050" id="qNumInv">8,7%</div><div class="ks">Da base total</div><span class="trend td">↑ 0,2%</span></div>
+        <div class="kc"><div class="kl">Qualidade da base</div><div class="kv lg" style="color:#5DBE8A" id="qQual">82,4%</div><div class="ks">Contatos válidos / total</div></div>
+        <div class="kc"><div class="kl">E-mails inválidos</div><div class="kv lg" style="color:#E05050" id="qEmailInv">12,3%</div><div class="ks">Da base total</div></div>
+        <div class="kc"><div class="kl">Números inválidos</div><div class="kv lg" style="color:#E05050" id="qNumInv">8,7%</div><div class="ks">Da base total</div></div>
       </div>
       <div class="row1 pn" style="margin-bottom:9px">
         <div class="pt">Crescimento da base <sup style="color:#7C6EDB">¹</sup></div>
@@ -614,7 +552,8 @@ async function carregarDadosRemoto() {
     // ── Reconstrói charts e re-renderiza todas as abas
     [chartEl, chartEl2, chartSms, chartQcr, chartOp, chartIp, chartPp].forEach(c => c && c.destroy());
     mkCharts();
-    renderEmail(); renderCampOverview();
+    renderEmail();
+    renderSmsKpis(ST.unit);
     renderSms();
     renderSmsCampanhas(ST.unit);
     renderQualidade(); renderOperacao();
@@ -791,24 +730,74 @@ const SMS_DETAIL={
 let ST_SMS_CAMP='';
 
 function txEntBadge(v){
-  if(v>=99) return `<span class="badge ok">${v.toFixed(1)}%</span>`;
-  if(v>=90) return `<span class="badge warn">${v.toFixed(1)}%</span>`;
-  return `<span class="badge bad">${v.toFixed(1)}%</span>`;
+  if(v>=99) return `<span class="badge ok">${fmtPct(v)}</span>`;
+  if(v>=90) return `<span class="badge warn">${fmtPct(v)}</span>`;
+  return `<span class="badge bad">${fmtPct(v)}</span>`;
 }
 function txFalhaBadge(v){
   if(v===0)   return `<span class="badge ok">0,0%</span>`;
-  if(v<=5)    return `<span class="badge warn">${v.toFixed(1)}%</span>`;
-  return `<span class="badge bad">${v.toFixed(1)}%</span>`;
+  if(v<=5)    return `<span class="badge warn">${fmtPct(v)}</span>`;
+  return `<span class="badge bad">${fmtPct(v)}</span>`;
+}
+
+// Reagrega a campanha considerando só as ações dentro do período (ST.from–ST.to).
+// Ações sem data são mantidas; campanha sem detalhe usa os totais originais.
+function smsAcoesNoPeriodo(c){
+  const d=SMS_DETAIL[c.key];
+  if(!d||!d.acoes.length) return {env:c.env,ent:c.ent,inv:c.inv,acoes:c.acoes};
+  const acs=d.acoes.filter(a=>{
+    const dt=parseDataBR(a.data);
+    return !dt||(dt>=ST.from&&dt<=ST.to);
+  });
+  return {
+    env:acs.reduce((s,a)=>s+a.env,0),
+    ent:acs.reduce((s,a)=>s+a.ent,0),
+    inv:acs.reduce((s,a)=>s+a.inv,0),
+    acoes:acs.length
+  };
+}
+
+// KPI cards de SMS — calculados das campanhas (reagem a unidade + período + dados remotos)
+function renderSmsKpis(unit){
+  const box=document.getElementById('sKpis');
+  const gcrNote=document.getElementById('sGCR');
+  if(unit==='GCR'){box.style.display='none';gcrNote.style.display='block';return;}
+  gcrNote.style.display='none';box.style.display='grid';
+  const u=unit==='todas'?'todas':unit;
+  const camps=SMS_CAMPS[u]||SMS_CAMPS.todas;
+  let env=0,ent=0,inv=0,acoes=0;
+  camps.forEach(c=>{const f=smsAcoesNoPeriodo(c);env+=f.env;ent+=f.ent;inv+=f.inv;acoes+=f.acoes;});
+  const txEnt=env>0?ent/env*100:0,txFalha=env>0?inv/env*100:0;
+  const uLbl=u==='todas'?'Total (CAS + SJC)':u;
+  const entCls=txEnt>=99?'ok':txEnt>=90?'warn':'bad';
+  const falCls=txFalha===0?'ok':txFalha<=5?'warn':'bad';
+  box.innerHTML=`
+    <div class="kc"><div class="kl">SMS enviados · ${uLbl}</div><div class="kv lg">${fmtN(env)}</div><div class="ks">${acoes} ${acoes===1?'ação':'ações'} no período</div></div>
+    <div class="kc"><div class="kl">SMS entregues</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div class="kv lg" style="color:#F47920">${fmtN(ent)}</div>
+        <span class="badge ${entCls}" style="font-size:11px;padding:2px 7px">${env>0?fmtPct(txEnt):'—'}</span>
+      </div><div class="ks">do total enviado</div></div>
+    <div class="kc"><div class="kl">Números inválidos</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div class="kv lg" style="color:${inv>0?'#E05050':'#5DBE8A'}">${fmtN(inv)}</div>
+        <span class="badge ${falCls}" style="font-size:11px;padding:2px 7px">${env>0?fmtPct(txFalha):'—'}</span>
+      </div><div class="ks">do total enviado</div></div>
+    <div class="kc"><div class="kl">Taxa de falha</div><div class="kv lg" style="color:${txFalha>5?'#E05050':txFalha>0?'#F5C842':'#5DBE8A'}">${fmtPct(txFalha)}</div><div class="ks">Inválidos / Enviados</div></div>`;
 }
 
 function renderSmsCampanhas(unit){
   ST_SMS_CAMP='';
   document.getElementById('sSmsBanner').style.display='none';
   const u=unit==='GCR'?'todas':unit;
-  const camps=SMS_CAMPS[u]||SMS_CAMPS.todas;
+  // Reagrega cada campanha pelo período e remove as sem movimento
+  const camps=(SMS_CAMPS[u]||SMS_CAMPS.todas)
+    .map(c=>{const f=smsAcoesNoPeriodo(c);return{...c,env:f.env,ent:f.ent,inv:f.inv,acoes:f.acoes,
+      txEnt:f.env>0?f.ent/f.env*100:0,txFalha:f.env>0?f.inv/f.env*100:0};})
+    .filter(c=>c.acoes>0&&c.env>0);
   document.getElementById('sSmsTableTitle').textContent='Performance por campanha — SMS'+(u!=='todas'?' · '+u:'');
   if(!camps.length){
-    document.getElementById('sSmsTableBody').innerHTML='<div class="no-data" style="padding:20px">Nenhuma campanha no período.</div>';
+    document.getElementById('sSmsTableBody').innerHTML='<div class="no-data" style="padding:20px">Nenhuma campanha no período selecionado.</div>';
     return;
   }
   const tot={env:0,ent:0,inv:0};
@@ -824,8 +813,8 @@ function renderSmsCampanhas(unit){
       <td class="rr">${txFalhaBadge(c.txFalha)}</td>
       <td><button onclick="renderSmsDetail('${c.key}')" style="font-size:9px;background:#EEF9FC;border:0.5px solid #2BB5C8;color:#0E6E88;border-radius:4px;padding:2px 7px;cursor:pointer">▶ Ver ações</button></td>
     </tr>`).join('');
-  const tEnt=tot.env>0?(tot.ent/tot.env*100).toFixed(1)+'%':'—';
-  const tFalha=tot.env>0?(tot.inv/tot.env*100).toFixed(1)+'%':'—';
+  const tEnt=tot.env>0?fmtPct(tot.ent/tot.env*100):'—';
+  const tFalha=tot.env>0?fmtPct(tot.inv/tot.env*100):'—';
   document.getElementById('sSmsTableBody').innerHTML=`
     <table>
       <thead><tr><th class="s">Campanha</th><th class="s" style="text-align:center">Ações</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th><th>Detalhe</th></tr></thead>
@@ -849,11 +838,20 @@ function renderSmsDetail(key){
     document.getElementById('sSmsTableBody').innerHTML='<div style="font-size:11px;color:#9CA3AF;padding:16px;text-align:center">Carregando ações da planilha…</div>';
     return;
   }
-  const totalEnv=d.acoes.reduce((s,a)=>s+a.env,0);
-  const totalEnt=d.acoes.reduce((s,a)=>s+a.ent,0);
-  const totalInv=d.acoes.reduce((s,a)=>s+a.inv,0);
-  const tEnt=totalEnv>0?(totalEnt/totalEnv*100).toFixed(1)+'%':'—';
-  const tFalha=totalEnv>0?(totalInv/totalEnv*100).toFixed(1)+'%':'—';
+  // Mesmo filtro de período da visão geral (ações sem data são mantidas)
+  const acs=d.acoes.filter(a=>{
+    const dt=parseDataBR(a.data);
+    return !dt||(dt>=ST.from&&dt<=ST.to);
+  });
+  if(!acs.length){
+    document.getElementById('sSmsTableBody').innerHTML='<div class="no-data" style="padding:20px">Nenhuma ação desta campanha no período selecionado.</div>';
+    return;
+  }
+  const totalEnv=acs.reduce((s,a)=>s+a.env,0);
+  const totalEnt=acs.reduce((s,a)=>s+a.ent,0);
+  const totalInv=acs.reduce((s,a)=>s+a.inv,0);
+  const tEnt=totalEnv>0?fmtPct(totalEnt/totalEnv*100):'—';
+  const tFalha=totalEnv>0?fmtPct(totalInv/totalEnv*100):'—';
   document.getElementById('sSmsTableBody').innerHTML=`
     <div class="kg k4" style="margin-bottom:9px">
       <div class="kc"><div class="kl">Total enviados</div><div class="kv">${fmtN(totalEnv)}</div></div>
@@ -863,7 +861,7 @@ function renderSmsDetail(key){
     </div>
     <table>
       <thead><tr><th class="s">Ação</th><th class="s">Data</th><th class="s">Unidade</th><th class="nr s">Enviados</th><th class="nr s">Entregues</th><th class="rr s">Taxa entrega</th><th class="nr s">Inválidos</th><th class="rr s">Taxa falha</th></tr></thead>
-      <tbody>${d.acoes.map(a=>`
+      <tbody>${acs.map(a=>`
         <tr>
           <td style="font-size:9px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.nome}">${a.nome}</td>
           <td style="font-size:9px;white-space:nowrap;color:#6B7280">${a.data||'—'}</td>
@@ -906,7 +904,7 @@ function renderSms(){
   const uLabel=unit==='todas'?'Todas (CAS + SJC)':unit;
   document.getElementById('sChartTitle').textContent=
     'SMS enviados por campanha — '+uLabel+
-    (cd.total?' · Total: '+cd.total.toLocaleString('pt-BR')+' enviados':'· sem dados no período');
+    (cd.total?' · Total: '+cd.total.toLocaleString('pt-BR')+' enviados':' · sem dados no período');
 }
 
 // Operação por unidade
@@ -1044,6 +1042,14 @@ function mkCharts(){
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 const fmtN=n=>n.toLocaleString('pt-BR');
 const f1=v=>v.toFixed(1); const f2=v=>v.toFixed(2);
+// Percentual no padrão pt-BR (vírgula decimal)
+const fmtPct=(v,d=1)=>v.toFixed(d).replace('.',',')+'%';
+// Data "dd/mm/aaaa" → Date (null se inválida/ausente)
+function parseDataBR(s){
+  if(!s) return null;
+  const m=String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  return m?new Date(+m[3],+m[2]-1,+m[1]):null;
+}
 
 function parseDate(s){
   const p=s.trim().split('/');
@@ -1062,15 +1068,15 @@ function getMesIdx(){
 
 // FIX #10 — badge positivo para taxas excepcionais
 function abBadge(v){
-  if(v>=70) return `<span class="highlight-pos" title="Taxa excepcional — audiência altamente qualificada">★ ${f1(v)}%</span>`;
-  if(v>=25) return `<span class="badge ok">${f1(v)}%</span>`;
-  if(v>=10) return `<span class="badge warn">${f1(v)}%</span>`;
-  return `<span class="badge bad">${f1(v)}%</span>`;
+  if(v>=70) return `<span class="highlight-pos" title="Taxa excepcional — audiência altamente qualificada">★ ${fmtPct(v)}</span>`;
+  if(v>=25) return `<span class="badge ok">${fmtPct(v)}</span>`;
+  if(v>=10) return `<span class="badge warn">${fmtPct(v)}</span>`;
+  return `<span class="badge bad">${fmtPct(v)}</span>`;
 }
 function ctrBadge(v){
-  if(v>=1.5) return `<span class="badge ok">${f2(v)}%</span>`;
-  if(v>=0.5) return `<span class="badge warn">${f2(v)}%</span>`;
-  return `<span class="badge bad">${f2(v)}%</span>`;
+  if(v>=1.5) return `<span class="badge ok">${fmtPct(v,2)}</span>`;
+  if(v>=0.5) return `<span class="badge warn">${fmtPct(v,2)}</span>`;
+  return `<span class="badge bad">${fmtPct(v,2)}</span>`;
 }
 
 // FIX #6 — barras proporcionais calculadas em JS
@@ -1080,7 +1086,7 @@ function renderOptBars(items){
     <div class="opt-bar">
       <div class="opt-label">${c.nome}</div>
       <div class="opt-fill" style="width:${Math.round((c.opt/max)*100)}px"></div>
-      <div class="opt-val">${f1(c.opt)}%</div>
+      <div class="opt-val">${fmtPct(c.opt)}</div>
     </div>`).join('');
   const total=items.reduce((s,c)=>s+c.ent*(c.opt/100),0);
   document.getElementById('eOptTotal').textContent='~'+fmtN(Math.round(total/1000)*1000);
@@ -1098,8 +1104,7 @@ function renderEmail(){
     document.getElementById('dtFrom').value+' – '+document.getElementById('dtTo').value;
 
   const em=getEM(); // dados da unidade selecionada
-  const idx=getMesIdx();
-  if(idx.length===0) return;
+  const idx=getMesIdx(); // vazio = período sem meses com dados → KPIs zerados
 
   const safe=(arr,i)=>(arr&&arr[i]!=null?arr[i]:0);
   const td=idx.reduce((s,i)=>s+safe(em.disp,i),0)*1000;
@@ -1124,11 +1129,16 @@ function renderEmail(){
   const setKpiBadge=(id,pct,dec,currRate,prevRate,invertido)=>{
     const el=document.getElementById(id);if(!el)return;
     if(pct==null){el.innerHTML='';return;}
-    const pctStr=pct.toFixed(dec||1)+'%';
-    if(prevRate==null||currRate==null){el.innerHTML=pctStr;return;}
+    const pctStr=fmtPct(pct,dec||1);
+    if(prevRate==null||currRate==null){
+      el.innerHTML=`<span style="font-size:11px;font-weight:600">${pctStr}</span>`;return;
+    }
     const subiu=currRate>prevRate;
     const positivo=invertido?!subiu:subiu;
-    el.innerHTML=pctStr+' <span style="color:'+(positivo?'#15803D':'#B91C1C')+'">'+(subiu?'↑':'↓')+'</span>';
+    const bg=positivo?'#DCFCE7':'#FEE2E2';
+    const cor=positivo?'#15803D':'#B91C1C';
+    const arrow=subiu?'↑':'↓';
+    el.innerHTML=`<span style="background:${bg};color:${cor};border-radius:4px;padding:2px 6px;font-size:10px;font-weight:500;white-space:nowrap">${pctStr} ${arrow}</span>`;
   };
   setKpiBadge('eEntBadge', td>0?te/td*100:null, 1, lD>0?lE/lD*100:0, pD?pE/pD*100:null, false);
   setKpiBadge('eInvBadge', td>0?ti/td*100:null, 1, lD>0?lI/lD*100:0, pD?pI/pD*100:null, true);
@@ -1136,9 +1146,13 @@ function renderEmail(){
   setKpiBadge('eClBadge',  te>0?tc/te*100:null, 2, lE>0?lC/lE*100:0, pE?pC/pE*100:null, false);
 
   if(te>0){
-    document.getElementById('eTxEnt').textContent=(te/td*100).toFixed(1)+'%';
-    document.getElementById('eTxAb').textContent=(ta/te*100).toFixed(1)+'%';
-    document.getElementById('eCtr').textContent=(tc/te*100).toFixed(2)+'%';
+    document.getElementById('eTxEnt').textContent=fmtPct(te/td*100);
+    document.getElementById('eTxAb').textContent=fmtPct(ta/te*100);
+    document.getElementById('eCtr').textContent=fmtPct(tc/te*100,2);
+  }else{
+    document.getElementById('eTxEnt').textContent='—';
+    document.getElementById('eTxAb').textContent='—';
+    document.getElementById('eCtr').textContent='—';
   }
 
   // Gráficos — diário se período ≤35 dias E DETAIL tem datas, mensal caso contrário
@@ -1266,13 +1280,13 @@ function renderCampDetail(key){
   });
   const exibidas=ordenadas.slice(0,LIMIT);
 
-  // KPIs rápidos da campanha
-  const totalDisp=d.acoes.reduce((s,a)=>s+(a.disp!=null?+a.disp:+a.ent),0);
-  const totalEnt=d.acoes.reduce((s,a)=>s+(+a.ent),0);
-  const totalAb=d.acoes.reduce((s,a)=>s+(+a.ent*(+a.ab/100)),0);
-  const totalCl=d.acoes.reduce((s,a)=>s+(+a.ent*(+a.ctr/100)),0);
-  const abMedia=totalEnt>0?(totalAb/totalEnt*100).toFixed(1):0;
-  const ctrMedia=totalEnt>0?(totalCl/totalEnt*100).toFixed(2):0;
+  // KPIs rápidos da campanha — calculados sobre o MESMO conjunto exibido na tabela (acoesBase)
+  const totalDisp=acoesBase.reduce((s,a)=>s+(a.disp!=null?+a.disp:+a.ent),0);
+  const totalEnt=acoesBase.reduce((s,a)=>s+(+a.ent),0);
+  const totalAb=acoesBase.reduce((s,a)=>s+(+a.ent*(+a.ab/100)),0);
+  const totalCl=acoesBase.reduce((s,a)=>s+(+a.ent*(+a.ctr/100)),0);
+  const abMedia=totalEnt>0?fmtPct(totalAb/totalEnt*100):'—';
+  const ctrMedia=totalEnt>0?fmtPct(totalCl/totalEnt*100,2):'—';
 
   document.getElementById('eTabTitle').textContent='Ações da campanha · '+total+' ações';
 
@@ -1283,8 +1297,8 @@ function renderCampDetail(key){
     <div class="kg k4" style="margin-bottom:9px">
       <div class="kc"><div class="kl">Disparados total</div><div class="kv">${fmtN(totalDisp)}</div></div>
       <div class="kc"><div class="kl">Entregues total</div><div class="kv" style="color:#F47920">${fmtN(totalEnt)}</div></div>
-      <div class="kc"><div class="kl">Abertura média</div><div class="kv" style="color:#2BB5C8">${abMedia}%</div></div>
-      <div class="kc"><div class="kl">CTR médio</div><div class="kv" style="color:#F5C842">${ctrMedia}%</div></div>
+      <div class="kc"><div class="kl">Abertura média</div><div class="kv" style="color:#2BB5C8">${abMedia}</div></div>
+      <div class="kc"><div class="kl">CTR médio</div><div class="kv" style="color:#F5C842">${ctrMedia}</div></div>
     </div>
     <table>
       <thead><tr><th class="s">Ação</th><th class="s" style="white-space:nowrap">Data envio</th><th class="nr s">Disparados</th><th class="nr s">Entregues</th><th class="rr s">Abertura</th><th class="rr s">CTR</th></tr></thead>
@@ -1315,9 +1329,9 @@ function renderQualidade(){
   document.getElementById('qUnidLabel').textContent=uMap[ST.unit]||'Geral';
   document.getElementById('qTotal').textContent=fmtN(d.total);
   document.getElementById('qTotalSub').textContent=d.sub;
-  document.getElementById('qQual').textContent=f1(d.qual)+'%';
-  document.getElementById('qEmailInv').textContent=f1(d.emailInv)+'%';
-  document.getElementById('qNumInv').textContent=f1(d.numInv)+'%';
+  document.getElementById('qQual').textContent=fmtPct(d.qual);
+  document.getElementById('qEmailInv').textContent=fmtPct(d.emailInv);
+  document.getElementById('qNumInv').textContent=fmtPct(d.numInv);
   if(chartQcr){chartQcr.data.datasets[0].data=d.novos;chartQcr.data.datasets[1].data=d.saidas;chartQcr.update();}
 }
 
@@ -1414,8 +1428,9 @@ function renderInteresse(unit){
 
   // Doughnuts
   if(chartIp){chartIp.destroy();chartPp.destroy();}
-  chartIp=new Chart(document.getElementById('cIp'),{type:'doughnut',data:{labels:d.nL,datasets:[{data:d.nD,backgroundColor:d.nC,borderWidth:2,borderColor:'white'}]},options:{...base,cutout:'55%'}});
-  chartPp=new Chart(document.getElementById('cPp'),{type:'doughnut',data:{labels:d.pL,datasets:[{data:d.pD,backgroundColor:d.pC,borderWidth:2,borderColor:'white'}]},options:{...base,cutout:'55%'}});
+  const dnut={...base,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+String(c.parsed).replace('.',',')+'%'}}}};
+  chartIp=new Chart(document.getElementById('cIp'),{type:'doughnut',data:{labels:d.nL,datasets:[{data:d.nD,backgroundColor:d.nC,borderWidth:2,borderColor:'white'}]},options:dnut});
+  chartPp=new Chart(document.getElementById('cPp'),{type:'doughnut',data:{labels:d.pL,datasets:[{data:d.pD,backgroundColor:d.pC,borderWidth:2,borderColor:'white'}]},options:dnut});
   document.getElementById('legNivel').innerHTML=d.nL.map((l,i)=>`<div class="li"><span class="ld" style="background:${d.nC[i]}"></span>${l} ${d.nD[i]}%</div>`).join('');
   document.getElementById('legPeriodo').innerHTML=d.pL.map((l,i)=>`<div class="li"><span class="ld" style="background:${d.pC[i]}"></span>${l} ${d.pD[i]}%</div>`).join('');
 
@@ -1442,11 +1457,7 @@ function onUnitChange(unit){
   ST.campanha='';
   populateCampSel();
   renderEmail();
-  ['sCAS','sSJC','sTodas','sGCR'].forEach(id=>document.getElementById(id).style.display='none');
-  if(unit==='CAS') document.getElementById('sCAS').style.display='block';
-  else if(unit==='SJC') document.getElementById('sSJC').style.display='block';
-  else if(unit==='GCR') document.getElementById('sGCR').style.display='block';
-  else document.getElementById('sTodas').style.display='block';
+  renderSmsKpis(unit);
   renderSms();
   renderSmsCampanhas(unit);
   renderQualidade();
@@ -1468,7 +1479,10 @@ function onDateChange(){
   inF.classList.remove('err');inT.classList.remove('err');
   ST.from=fD;ST.to=tD;
   renderEmail();
+  renderSmsKpis(ST.unit);
   renderSms();
+  // Mantém drill-down de SMS se ativo; senão re-renderiza a visão geral
+  ST_SMS_CAMP?renderSmsDetail(ST_SMS_CAMP):renderSmsCampanhas(ST.unit);
 }
 
 // ─── SORT DE TABELAS ──────────────────────────────────────────────────────────
@@ -1485,8 +1499,10 @@ function sortCol(th){
   const ss=TABLE_SORT[tid];
   ss.dir=ss.col===col?-ss.dir:1; ss.col=col;
   ths.forEach((h,i)=>{h.classList.remove('asc','desc');if(i===col)h.classList.add(ss.dir===1?'asc':'desc');});
-  // Parser: tenta numérico em pt-BR (1.234,5 → 1234.5), senão texto
+  // Parser: data dd/mm[/aaaa] [hh:mm] → número ordenável; senão numérico pt-BR; senão texto
   const parse=t=>{
+    const dm=t.trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?(?:\s+(\d{1,2}):(\d{2}))?$/);
+    if(dm) return (+(dm[3]||2026))*1e8+(+dm[2])*1e6+(+dm[1])*1e4+(+(dm[4]||0))*100+(+(dm[5]||0));
     const s=t.replace(/[~\s★]/g,'').replace(/[.]/g,'').replace(',','.').replace('%','');
     const n=parseFloat(s);return isNaN(n)?t.toLowerCase().trim():n;
   };
@@ -1537,15 +1553,14 @@ function populateCampSel(){
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 mkCharts();
 populateCampSel();
-renderCampOverview();
+renderEmail();
 renderQualidade();
 renderOperacao();
+renderSmsKpis('todas');
 renderSms();
 renderSmsCampanhas('todas');
 renderInteresse('todas');
 ['ts','tq','to','ti'].forEach(id=>document.getElementById(id).style.display='none');
-document.getElementById('sTodas').style.display='block';
-['sCAS','sSJC','sGCR'].forEach(id=>document.getElementById(id).style.display='none');
 // Carrega dados reais da planilha se APPS_SCRIPT_URL estiver configurada
 carregarDadosRemoto();
 </script>
